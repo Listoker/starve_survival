@@ -5,7 +5,7 @@ import random
 
 
 class Generachia(QWidget):
-    color_data = pyqtSignal(list)
+    color_data = pyqtSignal()
 
     def __init__(self, lvl):
         super(Generachia, self).__init__()
@@ -97,10 +97,36 @@ class Generachia(QWidget):
         self.okno213.setStyleSheet('QPushButton {background-color: #A3C1DA}')
 
     def mir(self):
-        pass
+        button = QApplication.instance().sender()
+        if button.text() == 'маленький':
+            self.lvl[2] = 1
+        if button.text() == 'обычный':
+            self.lvl[2] = 2
+        if button.text() == 'большой':
+            self.lvl[2] = 3
 
     def hardkor(self):
-        pass
+        button = QApplication.instance().sender()
+        if button.text() == 'простая':
+            self.lvl[1] = 1
+        if button.text() == 'нормальная':
+            self.lvl[1] = 2
+        if button.text() == 'сложная':
+            self.lvl[1] = 3
+
+    def mir_sozdan(self, mir, q, spawn):
+        for i in range(int(q)):
+            x = random.randrange(0, int(mir / 10) - 1)
+            y = random.randrange(0, int(mir / 10) - 1)
+
+            while self.map_[x][y] != '0':
+                if int(mir / 10) - 1 <= x:
+                    y += 1
+                    x = 0
+                    if int(mir / 10) - 1 <= y:
+                        y = 1
+                x += 1
+            self.map_[x][y] = spawn
 
     def start(self):
         q = 700
@@ -108,13 +134,14 @@ class Generachia(QWidget):
         e = 30
         r = 10
         t = 2
-        mir = 100
+        mir = 1000
         spawn = 1
 
         wolk = 20
         lisa = 15
         zaiz = 20
         kust = 30
+        print(self.lvl)
         if self.lvl[2] == 1:
             mir = 500
             q *= 0.5
@@ -131,143 +158,84 @@ class Generachia(QWidget):
             e *= 6
             r *= 6
             t *= 6
-        map = []
+        self.map_ = []
         for i in range(int(mir / 10)):
             map2 = []
             for i in range(int(mir / 10)):
                 map2.append('0')
-            map.append(map2)
-        for i in range(int(q)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'q'
-        for i in range(int(w)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'w'
-        for i in range(int(e)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'e'
-        for i in range(int(r)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'r'
-        for i in range(int(t)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 't'
+            self.map_.append(map2)
+        self.mir_sozdan(mir, q, 'q')
+        self.mir_sozdan(mir, w, 'w')
+        self.mir_sozdan(mir, e, 'e')
+        self.mir_sozdan(mir, r, 'r')
+        self.mir_sozdan(mir, t, 't')
         x = random.randrange(0, int(mir / 10) - 1)
         y = random.randrange(0, int(mir / 10) - 1)
-        while map[x][y] != '0':
+        while self.map_[x][y] != '0':
             if int(mir / 10) <= x:
                 y += 1
                 x = 0
                 if int(mir / 10) <= y:
                     y = 1
             x += 1
-        map[x][y] = '@'
+        self.map_[x][y] = '@'
         print(33)
-        for i in range(int(wolk)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'wolf 150'
-        for i in range(int(lisa)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'lisa 75'
-        for i in range(int(zaiz)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'zaiz 25'
-        for i in range(int(kust)):
-            x = random.randrange(0, int(mir / 10) - 1)
-            y = random.randrange(0, int(mir / 10) - 1)
-            while map[x][y] != '0':
-                if int(mir / 10) <= x:
-                    y += 1
-                    x = 0
-                    if int(mir / 10) <= y:
-                        y = 1
-                x += 1
-            map[x][y] = 'kust 6 900'
+        self.mir_sozdan(mir, wolk, 'wolf 150')
+        self.mir_sozdan(mir, lisa, 'lisa 75')
+        self.mir_sozdan(mir, zaiz, 'zaiz 25')
+        self.mir_sozdan(mir, kust, 'kust 6 400')
         print(999)
         for i in range(10):
             map2 = []
             for q in range(int(mir / 10)):
                 map2.append('water')
-            map.insert(0, map2)
+            self.map_.insert(0, map2)
         for i in range(10):
             map2 = []
             for q in range(int(mir / 10)):
                 map2.append('water')
-            map.append(map2)
+            self.map_.append(map2)
         map2 = []
         for i in range(10):
             map2.append('water')
         maaaaap = ''
-        for i in map:
-            maaaaap += '\n' + '$'.join(map2) + '$' + '$'.join(i) + '$' + '$'.join(map2)
+        self.lvl[0] = self.first_value.text()
+        for i in self.map_:
+            maaaaap += '\n' + '%'.join(map2) + '%' + '%'.join(i) + '%' + '%'.join(map2)
         with open('mir/' + self.lvl[0] + '.txt', 'w') as f:
             f.write(''.join(maaaaap))
         with open('inventar/' + self.lvl[0] + '.txt', 'w') as f:
-            f.write('1 pusto 0$2 pusto 0$3 pusto 0$4 pusto 0$5 pusto 0$6 pusto 0$7 pusto 0$8 pusto 0$9 pusto 0$HP 100$food 100$cold 100')
+            f.write('1 pusto 0%2 pusto 0%3 pusto 0%4 pusto 0%5 pusto 0%6 pusto 0%7 pusto 0%8 pusto 0%9 pusto 0%HP 100%food 100%cold 100')
+        with open('nastroiki_mira/' + self.lvl[0] + '.txt', 'w') as f:
+            self.lvl[1] = str(self.lvl[1])
+            self.lvl[2] = str(self.lvl[2])
+            f.write(' '.join(self.lvl))
+        self.color_data.emit()
+
+
+class Pomoch(QWidget):
+    def __init__(self, lvl):
+        super(Pomoch, self).__init__()
+        self.lvl = lvl
+        self.cvet = ['black']
+        self.qcvet = 'A3C1DA'
+        self.x = 1920
+        self.y = 1080
+        self.cvet_nadpisi = '000000'
+        self.x = 1280
+        self.y = 720
+        self.setupUI()
+
+    def setupUI(self):
+        self.setGeometry(0, 0, 1280, 720)
+        self.setWindowTitle('Обучение')
+        self.setStyleSheet(f"background-color: {self.cvet[0]};")
+
+        self.o1 = QLabel('Обучение'
+                         '', self)
+        self.o1.move(int(self.x / 6.5) - int(self.x / 128), int(self.y / 220))
+        self.o1.resize(int(self.x / 9.6), int(self.y / 10.8))
+        self.o1.setStyleSheet('QLabel {background-color: ' + self.cvet[0] + '; color: #C0C0C0;}')
 
 
 def except_hook(cls, exception, traceback):
