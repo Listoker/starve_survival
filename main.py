@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QFileDialog, QMainWindow
 from PyQt5.QtGui import QPalette, QBrush, QPixmap
 from sozdanie import Generachia
 from sozdanie import Pomoch
+from sozdanie import VseMiri
 import pygame
 import random
 import os
@@ -15,15 +16,18 @@ class StarveSurvival(QMainWindow, QWidget):
         self.lvl = ['1234567', 2, 2]
         self.generachia = Generachia(self.lvl)
         self.pomoch = Pomoch(self.lvl)
+        self.vse_miri = VseMiri(self.lvl)
         self.setupUI()
         self.generachia.color_data.connect(self.zakritie)
+        self.vse_miri.signal__.connect(self.zakritie2)
 
     def setupUI(self):
         self.setGeometry(300, 150, 1280, 720)
         self.setWindowTitle('Starve survival')
 
         self.greetine = QLabel(self)
-        self.greetine.move(540, 100)
+        self.greetine.move(570, 100)
+        self.greetine.resize(400, 100)
         self.greetine.setText("Starve survival")
 
         self.calculate_button = QPushButton('Начать новую игру', self)
@@ -61,10 +65,17 @@ class StarveSurvival(QMainWindow, QWidget):
         print(self.file_name)
         self.start()
 
-    def start_old(self):
-        self.file_name = QFileDialog.getOpenFileName(self, 'Выбор сохранения', '')[0]
+    def zakritie2(self):
+        self.vse_miri.close()
+        self.file_name = '/'.join(os.path.abspath(f"mir/{self.lvl[0]}.txt").split('\\'))
         print(self.file_name)
         self.start()
+
+    def start_old(self):
+        # self.file_name = QFileDialog.getOpenFileName(self, 'Выбор сохранения', '')[0]
+        self.vse_miri.show()
+        # print(self.file_name)
+        # self.start()
 
     def start(self):
 
@@ -195,28 +206,23 @@ class StarveSurvival(QMainWindow, QWidget):
             # вернем игрока, а также размер поля в клетках
             return new_player, x, y
 
-        def generate_level2(level):
-            new_player, x, y = None, None, None
+        def generate_level_kust(level):
             for y in range(len(level)):
                 for x in range(len(level[y])):
-                    if level[y][x] == '.':
-                        Tile('empty', x, y)
-                    if level[y][x] == '0':
-                        Tile('empty', x, y)
-                    elif level[y][x] == '#':
-                        Tile('wall', x, y)
-                    elif level[y][x] == 'q':
-                        Tile('tree', x, y)
-                    elif level[y][x] == 'w':
-                        Tile('kamen', x, y)
-                    elif level[y][x] == 'e':
-                        Tile('gold', x, y)
-                    elif level[y][x] == 'r':
-                        Tile('diamond', x, y)
-                    elif level[y][x] == 't':
-                        Tile('ametists', x, y)
-            # вернем игрока, а также размер поля в клетках
-            return x, y
+                    if 'kust 1' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
+                    elif 'kust 2' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
+                    elif 'kust 3' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
+                    elif 'kust 4' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
+                    elif 'kust 5' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
+                    elif 'kust 6' in level[y][x]:
+                        pass
+                    elif 'kust' in level[y][x]:
+                        kusti.append([y, x, level_map[y][x]])
 
         def inventar_skachivanie(name):
             name = name.split('/')
@@ -671,6 +677,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     # tile_height * self.pos_x + 15, tile_height * self.pos_y + 5)
 
         def move(hero, dir):
+            # перемещение героя
             x, y = hero.pos
             if dir == 'up':
                 if y > 0 and level_map[y - 1][x] == '0':
@@ -1161,12 +1168,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
             q1 = 0
-            w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1187,11 +1188,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     dob = 1
             q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1212,13 +1208,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'stena_kamen'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'kamen_inv' in i:
@@ -1237,13 +1227,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'block_gold'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'gold_inv' in i:
@@ -1262,13 +1246,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'block_diamond'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'diamond_inv' in i:
@@ -1287,13 +1265,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'block_ametist'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'ametist_inv' in i:
@@ -1314,11 +1286,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     dob = 1
             q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1343,11 +1310,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     dob = 1
             q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1372,11 +1334,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     dob = 1
             q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1402,10 +1359,6 @@ class StarveSurvival(QMainWindow, QWidget):
             q1 = 0
             w1 = 0
             e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1432,13 +1385,9 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'kirka_diamond'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
             e1 = 0
             r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'diamond_inv' in i:
@@ -1465,13 +1414,9 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'kirka_ametist'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
-            w1 = 0
             e1 = 0
             r1 = 0
             t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'diamond_inv' in i:
@@ -1500,11 +1445,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     dob = 1
             q1 = 0
             w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1530,10 +1470,6 @@ class StarveSurvival(QMainWindow, QWidget):
             q1 = 0
             w1 = 0
             e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1560,13 +1496,9 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'mech_diamond'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
             w1 = 0
             e1 = 0
             r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'diamond_inv' in i:
@@ -1593,13 +1525,9 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][1] = 'mech_ametist'
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
-            q1 = 0
-            w1 = 0
             e1 = 0
             r1 = 0
             t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'diamond_inv' in i:
@@ -1627,8 +1555,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
             maso_siroe = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'maso_siroe' in i:
@@ -2134,12 +2060,15 @@ class StarveSurvival(QMainWindow, QWidget):
         }
         # основной персонаж
         # группы спрайтов
+        kusti = []
         all_sprites = pygame.sprite.Group()
         tiles_group = pygame.sprite.Group()
         player_group = pygame.sprite.Group()
         camera = Camera()
         level_map = load_level(self.file_name.split('/')[-1])
         player, level_x, level_y = generate_level(load_level(self.file_name.split('/')[-1]))
+
+        generate_level_kust(level_map)
 
 
 
@@ -2158,7 +2087,7 @@ class StarveSurvival(QMainWindow, QWidget):
 
         FPS = 60
         running = True
-        start_screen()
+        # start_screen()
         y = 0
         x = 0
         bb = 1
@@ -2176,11 +2105,13 @@ class StarveSurvival(QMainWindow, QWidget):
         sila = 0
         yron = 0
         obnovlenie_mobov = 0
-        kusti = []
         konez = 0
 
+        kakoi_ikran = 0
+
         with open('nastroiki_mira/' + self.file_name.split('/')[-1], 'r') as nygno:
-            lvl = nygno.read().split()
+            lvl = nygno.read().split('%_%')
+            print(lvl)
             lvl[1] = int(lvl[1])
             lvl[2] = int(lvl[2])
 
@@ -2231,6 +2162,13 @@ class StarveSurvival(QMainWindow, QWidget):
                         move(player, 'right')
                         bb = 1
                         lomanie = 0
+                    if event.key == pygame.K_F11:
+                        if kakoi_ikran == 0:
+                            screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
+                            kakoi_ikran = 1
+                        else:
+                            screen = pygame.display.set_mode((1280, 720))
+                            kakoi_ikran = 0
                 if event.type == pygame.MOUSEBUTTONDOWN and konez == 0:
                     if event.button == 3:
                         f = 0
@@ -2418,6 +2356,7 @@ class StarveSurvival(QMainWindow, QWidget):
                         kust[2] = '400'
                         level_map[kusti[chet][0]][kusti[chet][1]] = ' '.join(kust)
                     kusti[chet][2] = ' '.join(kust)
+                    print(kusti)
                     if kust[1] == '6':
                         del kusti[chet]
             verstak_nalichie = verstak_proverka(player)
@@ -2487,7 +2426,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     inven += str(i2) + ' '
                 inven = inven[:-1] + '%'
             with open('inventar/' + lvl[0] + '.txt', 'w') as f:
-                print(inven[:-1])
                 f.write(''.join(inven)[:-1])
         pygame.quit()
 
