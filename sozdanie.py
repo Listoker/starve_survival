@@ -294,7 +294,9 @@ class VseMiri(QWidget):
         self.o1.resize(int(self.x / 9.6), int(self.y / 10.8))
         self.o1.setStyleSheet('QLabel {background-color: ' + self.cvet[0] + '; color: #C0C0C0;}')
 
-        spisok_mirov = os.listdir('C:/Users/egor5/PycharmProjects/pythonProject/mir')
+        doroga = '/'.join(os.getcwd().split('\\'))
+
+        spisok_mirov = os.listdir(f'{doroga}/mir')
 
         mygroupbox = QtWidgets.QGroupBox('')
         myform = QFormLayout()

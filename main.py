@@ -62,13 +62,11 @@ class StarveSurvival(QMainWindow, QWidget):
     def zakritie(self):
         self.generachia.close()
         self.file_name = '/'.join(os.path.abspath(f"mir/{self.lvl[0]}.txt").split('\\'))
-        print(self.file_name)
         self.start()
 
     def zakritie2(self):
         self.vse_miri.close()
         self.file_name = '/'.join(os.path.abspath(f"mir/{self.lvl[0]}.txt").split('\\'))
-        print(self.file_name)
         self.start()
 
     def start_old(self):
@@ -106,7 +104,6 @@ class StarveSurvival(QMainWindow, QWidget):
             for lev in level2:
                 level_map.append(lev.split('%'))
             max_width = max(map(len, level_map))
-            print(level_map)
 
             # дополняем каждую строку пустыми клетками ('.')
             return level_map
@@ -1922,7 +1919,6 @@ class StarveSurvival(QMainWindow, QWidget):
                                 maso_zaiz()
                                 spawn_resursa('zaiz 25')
             if y_ydar < x_ydar > 360 and x_ydar + y_ydar > 720:
-                print(1234)
                 for ne_i in range(vtoroe):
                     for ne_i2 in range(pervoe):
                         if 'lisa' in level_map[y + ne_i2 - 1][x + 1 + ne_i]:
@@ -2100,7 +2096,6 @@ class StarveSurvival(QMainWindow, QWidget):
         r1 = 0
         t1 = 0
         stavka_predmeta = []
-        print(123)
         rezim_vstavka_bloca = 0
         sila = 0
         yron = 0
@@ -2111,7 +2106,6 @@ class StarveSurvival(QMainWindow, QWidget):
 
         with open('nastroiki_mira/' + self.file_name.split('/')[-1], 'r') as nygno:
             lvl = nygno.read().split('%_%')
-            print(lvl)
             lvl[1] = int(lvl[1])
             lvl[2] = int(lvl[2])
 
@@ -2188,7 +2182,6 @@ class StarveSurvival(QMainWindow, QWidget):
                             if event.pos[0] < (spi_koord[0] + 1) * spi_koord[2] + 1 and event.pos[1] < (spi_koord[
                                     1] + 1) * spi_koord[2] + 1 and f == 0:
                                 f = 1
-                                print(spi_koord)
                                 if spi_koord[3] == 'kirka':
                                     craft_cirki()
                                 elif spi_koord[3] == 'mech':
@@ -2309,7 +2302,6 @@ class StarveSurvival(QMainWindow, QWidget):
                             stavka_predmeta[2] = str(int(stavka_predmeta[2]) - 1)
                             if int(stavka_predmeta[2]) > 0:
                                 inventar[int(stavka_predmeta[0]) - 1] = stavka_predmeta
-                                print(inventar)
                             else:
                                 inventar[int(stavka_predmeta[0]) - 1] = [stavka_predmeta[0], 'pusto', '0']
                                 rezim_vstavka_bloca = 0
@@ -2322,8 +2314,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar = []
                     for inv in inventar_spisok:
                         inventar.append(inv.split())
-                    print(2)
-                    print(inventar)
                     # if pygame.mouse.get_pressed()[0]:
                         # print(123)
             # all_sprites = pygame.sprite.Group()
@@ -2356,7 +2346,6 @@ class StarveSurvival(QMainWindow, QWidget):
                         kust[2] = '400'
                         level_map[kusti[chet][0]][kusti[chet][1]] = ' '.join(kust)
                     kusti[chet][2] = ' '.join(kust)
-                    print(kusti)
                     if kust[1] == '6':
                         del kusti[chet]
             verstak_nalichie = verstak_proverka(player)
