@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QLCDNumber
-from PyQt5.QtWidgets import QFileDialog, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPalette, QBrush, QPixmap
 from sozdanie import Generachia
 from sozdanie import Pomoch
@@ -95,51 +95,15 @@ class StarveSurvival(QMainWindow, QWidget):
 
         def load_level(filename):
             filename = "mir/" + filename
-            # читаем уровень, убирая символы перевода строки
+            # функция для получения карты из тестового документа
             with open(filename, 'r') as mapFile:
                 level_map = [line.strip() for line in mapFile]
-            # и подсчитываем максимальную длину
             level2 = level_map
             level_map = []
+            # разбивает текст на список
             for lev in level2:
                 level_map.append(lev.split('%'))
-            max_width = max(map(len, level_map))
-
-            # дополняем каждую строку пустыми клетками ('.')
             return level_map
-
-        def terminate():
-            pygame.quit()
-            sys.exit()
-
-        def start_screen():
-            intro_text = ["ЗАСТАВКА", "",
-                          "Правила игры",
-                          "Если в правилах несколько строк,",
-                          "приходится выводить их построчно"]
-
-            fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
-            screen.blit(fon, (0, 0))
-            font = pygame.font.Font(None, 30)
-            text_coord = 50
-            for line in intro_text:
-                string_rendered = font.render(line, 1, pygame.Color('black'))
-                intro_rect = string_rendered.get_rect()
-                text_coord += 10
-                intro_rect.top = text_coord
-                intro_rect.x = 10
-                text_coord += intro_rect.height
-                screen.blit(string_rendered, intro_rect)
-
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        terminate()
-                    elif event.type == pygame.KEYDOWN or \
-                            event.type == pygame.MOUSEBUTTONDOWN:
-                        return  # начинаем игру
-                pygame.display.flip()
-                clock.tick(FPS)
 
         def generate_level(level):
             new_player, x, y = None, None, None
@@ -235,8 +199,14 @@ class StarveSurvival(QMainWindow, QWidget):
                     invent.append(inv.split())
             return invent
 
+        def text_napisanie_chisla(i):
+            font = pygame.font.Font(None, 30)
+            text = font.render(str(i[-1]), 1, (100, 100, 100))
+            screen.blit(text, (380 + int(i[0]) * 50, 700))
+
         def inventar_spawn():
             for i in inventar:
+                # проверка какие предметы в инвентаре и их спавн в окне игры
                 if 'pusto' in i:
                     pn = pygame.image.load('data/pusto.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
@@ -245,202 +215,127 @@ class StarveSurvival(QMainWindow, QWidget):
                     pn = pygame.image.load('data/drevesina.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kamen_inv' in i:
                     pn = pygame.image.load('data/kamen_inv.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kirka_derevo' in i:
                     pn = pygame.image.load('data/kirka_derevo.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'mech_derevo' in i:
                     pn = pygame.image.load('data/mech_derevo.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'stena_derevo' in i:
                     pn = pygame.image.load('data/stena_derevo_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'verstak' in i:
                     pn = pygame.image.load('data/verstak_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'koster' in i:
                     pn = pygame.image.load('data/koster_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'gold_inv' in i:
                     pn = pygame.image.load('data/gold_inv.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'diamond_inv' in i:
                     pn = pygame.image.load('data/diamond_inv.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'ametist_inv' in i:
                     pn = pygame.image.load('data/ametist_inv.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kirka_kamen' in i:
                     pn = pygame.image.load('data/kirka_kamen.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kirka_gold' in i:
                     pn = pygame.image.load('data/kirka_gold.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kirka_diamond' in i:
                     pn = pygame.image.load('data/kirka_diamond.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'kirka_ametist' in i:
                     pn = pygame.image.load('data/kirka_ametist.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'agoda' in i:
                     pn = pygame.image.load('data/agoda.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'maso_siroe' in i:
                     pn = pygame.image.load('data/maso_siroe.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'maso_jarenoe' in i:
                     pn = pygame.image.load('data/maso_jarenoe.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'stena_kamen' in i:
                     pn = pygame.image.load('data/stena_kamen_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'block_gold' in i:
                     pn = pygame.image.load('data/block_gold_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'block_diamond' in i:
                     pn = pygame.image.load('data/block_diamond_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'block_ametist' in i:
                     pn = pygame.image.load('data/block_ametist_craft.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'mech_kamen' in i:
                     pn = pygame.image.load('data/mech_kamen.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'mech_gold' in i:
                     pn = pygame.image.load('data/mech_gold.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'mech_diamond' in i:
                     pn = pygame.image.load('data/mech_diamond.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
                 elif 'mech_ametist' in i:
                     pn = pygame.image.load('data/mech_ametist.png')
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
-
-                    font = pygame.font.Font(None, 30)
-                    text = font.render(str(i[-1]), 1, (100, 100, 100))
-                    screen.blit(text, (380 + int(i[0]) * 50, 700))
+                    text_napisanie_chisla(i)
 
                 elif 'HP' in i:
                     hp = int(i[1]) / 100
@@ -453,7 +348,7 @@ class StarveSurvival(QMainWindow, QWidget):
                     if hp > 1:
                         hp = 1
                     pygame.draw.rect(screen, (0, 0, 0), (565, 645, 150, 25))
-                    # 72,6,7 - цвет болгарская роза
+                    # 72,6,7 - цвет болгарская роза, не знаю зачем, но я даже нашел интересные цвета
                     pygame.draw.rect(screen, (72, 6, 7), (568, 648, int(144 * hp), 19))
                 elif 'cold' in i:
                     hp = int(i[1]) / 100
@@ -667,12 +562,6 @@ class StarveSurvival(QMainWindow, QWidget):
                 self.pos_y = pos_y
                 self.pos = (self.pos_x, self.pos_y)
 
-            # def move(self, x, y):
-                # self.pos_x = x
-                # self.pos_y = y
-                # self.rect = self.image.get_rect().move(
-                    # tile_height * self.pos_x + 15, tile_height * self.pos_y + 5)
-
         def move(hero, dir):
             # перемещение героя
             x, y = hero.pos
@@ -716,65 +605,18 @@ class StarveSurvival(QMainWindow, QWidget):
                             camera.apply5(sprite)
             hero.pos = x, y
 
-        def dobicha_dereva():
+        def dobicha_vsego(material, minimum, maksimum):
             dob = 0
             for inv in inventar:
-                if 'drevesina' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(15, 25)
+                if material in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(minimum, maksimum)
                     dob = 1
+                    break
             for inv in inventar:
                 if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'drevesina'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(15, 25)
-                    dob = 1
-
-        def dobicha_kamna():
-            dob = 0
-            for inv in inventar:
-                if 'kamen_inv' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(12, 20)
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kamen_inv'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(12, 20)
-                    dob = 1
-
-        def dobicha_gold():
-            dob = 0
-            for inv in inventar:
-                if 'gold_inv' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(12, 20)
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'gold_inv'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(12, 20)
-                    dob = 1
-
-        def dobicha_diamond():
-            dob = 0
-            for inv in inventar:
-                if 'diamond_inv' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(7, 15)
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'diamond_inv'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(7, 15)
-                    dob = 1
-
-        def dobicha_ametostov():
-            dob = 0
-            for inv in inventar:
-                if 'ametist_inv' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(4, 9)
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'ametist_inv'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(4, 9)
-                    dob = 1
+                    inventar[int(inv[0]) - 1][1] = material
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + random.randint(minimum, maksimum)
+                    break
 
         def dobicha_agod():
             dob = 0
@@ -796,7 +638,7 @@ class StarveSurvival(QMainWindow, QWidget):
                 if int(mir) - 1 <= x:
                     y += 1
                     x = 11
-                    if int(mir / 10) - 1 <= y:
+                    if int(mir) - 1 <= y:
                         y = 11
                 x += 1
             level_map[x][y] = resurs
@@ -805,286 +647,48 @@ class StarveSurvival(QMainWindow, QWidget):
             x, y = hero.pos
             dobicha_nachati = 7
             # проверка на ресурсы вокруг игрока
-            if y > 0 and level_map[y - 1][x] != '0':
-                if level_map[y - 1][x] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y - 1][x] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y - 1][x] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y - 1][x] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y - 1][x] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y - 1][x] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y - 1][x] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y - 1][x] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y - 1][x] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y - 1][x] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y - 1][x]:
-                        level_map[y - 1][x] = 'kust ' + str(agods) + ' ' + level_map[y - 1][x].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y - 1 in kusti[chet] and x in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y - 1, x, level_map[y - 1][x]])
-            if y > 0 and level_map[y - 1][x + 1] != '0':
-                if level_map[y - 1][x + 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y - 1][x + 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y - 1][x + 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y - 1][x + 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y - 1][x + 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y - 1][x + 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y - 1][x + 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y - 1][x + 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y - 1][x + 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y - 1][x + 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y - 1][x + 1]:
-                        level_map[y - 1][x + 1] = 'kust ' + str(agods) + ' ' + level_map[y - 1][x + 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y - 1 in kusti[chet] and x + 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y - 1, x + 1, level_map[y - 1][x + 1]])
-            if y > 0 and level_map[y][x - 1] != '0':
-                if level_map[y][x - 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y][x - 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y][x - 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y][x - 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y][x - 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y][x - 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y][x - 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y][x - 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y][x - 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y][x - 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y][x - 1]:
-                        level_map[y][x - 1] = 'kust ' + str(agods) + ' ' + level_map[y][x - 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y in kusti[chet] and x - 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y, x - 1, level_map[y][x - 1]])
-            if y > 0 and level_map[y][x + 1] != '0':
-                if level_map[y][x + 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y][x + 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y][x + 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y][x + 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y][x + 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y][x + 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y][x + 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y][x + 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y][x + 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y][x + 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y][x + 1]:
-                        level_map[y][x + 1] = 'kust ' + str(agods) + ' ' + level_map[y][x + 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y in kusti[chet] and x + 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y, x + 1, level_map[y][x + 1]])
-            if y > 0 and level_map[y + 1][x - 1] != '0':
-                if level_map[y + 1][x - 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y + 1][x - 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y + 1][x - 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y + 1][x - 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y + 1][x - 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y + 1][x - 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y + 1][x - 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y + 1][x - 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y + 1][x - 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y + 1][x - 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y + 1][x - 1]:
-                        level_map[y + 1][x - 1] = 'kust ' + str(agods) + ' ' + level_map[y + 1][x - 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y + 1 in kusti[chet] and x - 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y + 1, x - 1, level_map[y + 1][x - 1]])
-            if y > 0 and level_map[y + 1][x] != '0':
-                if level_map[y + 1][x] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y + 1][x] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y + 1][x] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y + 1][x] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y + 1][x] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y + 1][x] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y + 1][x] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y + 1][x] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y + 1][x] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y + 1][x] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y + 1][x]:
-                        level_map[y + 1][x] = 'kust ' + str(agods) + ' ' + level_map[y + 1][x].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y + 1 in kusti[chet] and x in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y + 1, x, level_map[y + 1][x]])
-            if y > 0 and level_map[y + 1][x + 1] != '0':
-                if level_map[y + 1][x + 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y + 1][x + 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y + 1][x + 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y + 1][x + 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y + 1][x + 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y + 1][x + 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y + 1][x + 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y + 1][x + 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y + 1][x + 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y + 1][x + 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y + 1][x + 1]:
-                        level_map[y + 1][x + 1] = 'kust ' + str(agods) + ' ' + level_map[y + 1][x + 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y + 1 in kusti[chet] and x + 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y + 1, x + 1, level_map[y + 1][x + 1]])
-            if y > 0 and level_map[y - 1][x - 1] != '0':
-                if level_map[y - 1][x - 1] == 'q' and lomanie == dobicha_nachati - sila:
-                    level_map[y - 1][x - 1] = '0'
-                    dobicha_dereva()
-                    spawn_resursa('q')
-                elif level_map[y - 1][x - 1] == 'w' and lomanie == dobicha_nachati + 2 - sila and sila > 0:
-                    level_map[y - 1][x - 1] = '0'
-                    dobicha_kamna()
-                    spawn_resursa('w')
-                elif level_map[y - 1][x - 1] == 'e' and lomanie == dobicha_nachati + 4 - sila and sila > 1:
-                    level_map[y - 1][x - 1] = '0'
-                    dobicha_gold()
-                    spawn_resursa('e')
-                elif level_map[y - 1][x - 1] == 'r' and lomanie == dobicha_nachati + 6 - sila and sila > 2:
-                    level_map[y - 1][x - 1] = '0'
-                    dobicha_diamond()
-                    spawn_resursa('r')
-                elif level_map[y - 1][x - 1] == 't' and lomanie == dobicha_nachati + 8 - sila and sila > 3:
-                    level_map[y - 1][x - 1] = '0'
-                    dobicha_ametostov()
-                    spawn_resursa('t')
-                for agods in range(6):
-                    if 'kust ' + str(agods + 1) in level_map[y - 1][x - 1]:
-                        level_map[y - 1][x - 1] = 'kust ' + str(agods) + ' ' + level_map[y - 1][x - 1].split()[-1]
-                        dobicha_agod()
-                        ff = 0
-                        for chet in range(len(kusti)):
-                            if y - 1 in kusti[chet] and x - 1 in kusti[chet]:
-                                kust__ = kusti[chet][2].split()
-                                kust__[1] = str(int(kust__[1]) - 1)
-                                kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
-                                ff = 1
-                                break
-                        if ff == 0:
-                            kusti.append([y - 1, x - 1, level_map[y - 1][x - 1]])
+            pervoe = 3
+            vtoroe = 3
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'q' and lomanie == dobicha_nachati - sila:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        dobicha_vsego('drevesina', 15, 25)
+                        spawn_resursa('q')
+                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'w' and lomanie == dobicha_nachati + 2 - \
+                            sila and sila > 0:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        dobicha_vsego('kamen_inv', 12, 20)
+                        spawn_resursa('w')
+                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'e' and lomanie == dobicha_nachati + 4 - \
+                            sila and sila > 1:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        dobicha_vsego('gold_inv', 10, 18)
+                        spawn_resursa('e')
+                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'r' and lomanie == dobicha_nachati + 6 - \
+                            sila and sila > 2:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        dobicha_vsego('diamond_inv', 7, 15)
+                        spawn_resursa('r')
+                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 't' and lomanie == dobicha_nachati + 8 - \
+                            sila and sila > 3:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        dobicha_vsego('ametist_inv', 4, 9)
+                        spawn_resursa('t')
+                    for agods in range(6):
+                        if 'kust ' + str(agods + 1) in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                            level_map[y - ne_i + 1][x - 1 + ne_i2] = 'kust ' + str(agods) + ' ' + level_map[y - ne_i + 1][x - 1 + ne_i2].split()[-1]
+                            dobicha_agod()
+                            ff = 0
+                            for chet in range(len(kusti)):
+                                if y - ne_i + 1 in kusti[chet] and x - 1 + ne_i2 in kusti[chet]:
+                                    kust__ = kusti[chet][2].split()
+                                    kust__[1] = str(int(kust__[1]) - 1)
+                                    kusti[chet] = [kusti[chet][0], kusti[chet][1], ' '.join(kust__)]
+                                    ff = 1
+                                    break
+                            if ff == 0:
+                                kusti.append([y - ne_i + 1, x - 1 + ne_i2, level_map[y - ne_i + 1][x - 1 + ne_i2]])
             # level_x, level_y = generate_level2(load_level(self.file_name.split('/')[-1]))
 
         class Camera:
@@ -1127,25 +731,32 @@ class StarveSurvival(QMainWindow, QWidget):
                     else:
                         inventar[int(inv[0]) - 1] = [inv[0], 'pusto', '0']
 
-        # дальше идут крафты
-        def craft_cirki():
+        def dobavlenie_predmeta_v(predmet):
+            # добавляет предмет в инвентарь
             dob = 0
             for inv in inventar:
-                if 'kirka_derevo' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
+                if predmet in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     dob = 1
+                    break
             for inv in inventar:
                 if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kirka_derevo'
+                    inventar[int(inv[0]) - 1][1] = predmet
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+                    break
+
+        # дальше идут крафты
+        def craft_cirki():
+            dobavlenie_predmeta_v('kirka_derevo')
             q1 = 0
-            w1 = 0
-            e1 = 0
-            r1 = 0
-            t1 = 0
-            craft_chislo_x = 0
-            craft_chislo_y = 0
+            # для удобства добавления крафтов, так как qwerty клавиатура почти у всех, то то ее можно как уровни считать
+            # q - первый уровень и тд
+            # w1 = 0
+            # e1 = 0
+            # r1 = 0
+            # t1 = 0
+            # craft_chislo_x = 0
+            # craft_chislo_y = 0
             spisok_koord_craft.clear()
             for i in inventar:
                 if 'drevesina' in i:
@@ -1153,17 +764,10 @@ class StarveSurvival(QMainWindow, QWidget):
             q1 -= 30
             v_inventar('drevesina', q1)
 
+        # в угоду оптимизации, так как не придется считать все ресурсы, а только те, которые нужны
+
         def craft_mech():
-            dob = 0
-            for inv in inventar:
-                if 'mech_derevo' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'mech_derevo'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('mech_derevo')
             q1 = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1173,16 +777,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('drevesina', q1)
 
         def craft_stena():
-            dob = 0
-            for inv in inventar:
-                if 'stena_derevo' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'stena_derevo'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('stena_derevo')
             q1 = 0
             w1 = 0
             spisok_koord_craft.clear()
@@ -1195,16 +790,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('drevesina', q1)
 
         def craft_stena_kamen():
-            dob = 0
-            for inv in inventar:
-                if 'stena_kamen' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'stena_kamen'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('stena_kamen')
             w1 = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1214,16 +800,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('kamen_inv', w1)
 
         def craft_block_gold():
-            dob = 0
-            for inv in inventar:
-                if 'block_gold' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'block_gold'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('block_gold')
             w1 = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1233,16 +810,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('gold_inv', w1)
 
         def craft_block_diamond():
-            dob = 0
-            for inv in inventar:
-                if 'block_diamond' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'block_diamond'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('block_diamond')
             w1 = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1252,16 +820,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('diamond_inv', w1)
 
         def craft_block_ametist():
-            dob = 0
-            for inv in inventar:
-                if 'block_ametist' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'block_ametist'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('block_ametist')
             w1 = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1271,16 +830,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('ametist_inv', w1)
 
         def craft_verstak():
-            dob = 0
-            for inv in inventar:
-                if 'verstak' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'verstak'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('verstak')
             q1 = 0
             w1 = 0
             spisok_koord_craft.clear()
@@ -1295,16 +845,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('kamen_inv', w1)
 
         def craft_koster():
-            dob = 0
-            for inv in inventar:
-                if 'koster' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'koster'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('koster')
             q1 = 0
             w1 = 0
             spisok_koord_craft.clear()
@@ -1319,16 +860,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('kamen_inv', w1)
 
         def craft_kirki_kamen():
-            dob = 0
-            for inv in inventar:
-                if 'kirka_kamen' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kirka_kamen'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('kirka_kamen')
             q1 = 0
             w1 = 0
             spisok_koord_craft.clear()
@@ -1343,16 +875,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('kamen_inv', w1)
 
         def craft_kirki_gold():
-            dob = 0
-            for inv in inventar:
-                if 'kirka_gold' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kirka_gold'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('kirka_gold')
             q1 = 0
             w1 = 0
             e1 = 0
@@ -1372,16 +895,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('gold_inv', e1)
 
         def craft_kirki_diamond():
-            dob = 0
-            for inv in inventar:
-                if 'kirka_diamond' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kirka_diamond'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('kirka_diamond')
             w1 = 0
             e1 = 0
             r1 = 0
@@ -1401,16 +915,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('diamond_inv', r1)
 
         def craft_kirki_ametist():
-            dob = 0
-            for inv in inventar:
-                if 'kirka_ametist' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'kirka_ametist'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('kirka_ametist')
             e1 = 0
             r1 = 0
             t1 = 0
@@ -1430,16 +935,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('ametist_inv', t1)
 
         def craft_mech_kamen():
-            dob = 0
-            for inv in inventar:
-                if 'mech_kamen' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'mech_kamen'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('mech_kamen')
             q1 = 0
             w1 = 0
             spisok_koord_craft.clear()
@@ -1454,16 +950,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('kamen_inv', w1)
 
         def craft_mech_gold():
-            dob = 0
-            for inv in inventar:
-                if 'mech_gold' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'mech_gold'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('mech_gold')
             q1 = 0
             w1 = 0
             e1 = 0
@@ -1483,16 +970,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('gold_inv', e1)
 
         def craft_mech_diamond():
-            dob = 0
-            for inv in inventar:
-                if 'mech_diamond' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'mech_diamond'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('mech_diamond')
             w1 = 0
             e1 = 0
             r1 = 0
@@ -1512,16 +990,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('diamond_inv', r1)
 
         def craft_mech_ametist():
-            dob = 0
-            for inv in inventar:
-                if 'mech_ametist' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'mech_ametist'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('mech_ametist')
             e1 = 0
             r1 = 0
             t1 = 0
@@ -1541,16 +1010,7 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('ametist_inv', t1)
 
         def craft_masa_jarennogo():
-            dob = 0
-            for inv in inventar:
-                if 'maso_jarenoe' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'maso_jarenoe'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
+            dobavlenie_predmeta_v('maso_jarenoe')
             maso_siroe = 0
             spisok_koord_craft.clear()
             for i in inventar:
@@ -1559,7 +1019,6 @@ class StarveSurvival(QMainWindow, QWidget):
             maso_siroe -= 1
             for inv in inventar:
                 if 'maso_siroe' in inv:
-                    # and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355
                     if 0 < maso_siroe < 356:
                         inventar[int(inv[0]) - 1][2] = maso_siroe
                         maso_siroe = 0
@@ -1629,47 +1088,43 @@ class StarveSurvival(QMainWindow, QWidget):
             x, y = hero.pos
             # проверка на наличие верстака вокруг игрока
             verstak_nalichie = False
-            if level_map[y - 1][x - 1] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y - 1][x] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y - 1][x + 1] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y][x - 1] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y][x + 1] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y + 1][x - 1] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y + 1][x] == 'verstak':
-                verstak_nalichie = True
-            if level_map[y + 1][x + 1] == 'verstak':
-                verstak_nalichie = True
+            pervoe = 3
+            vtoroe = 3
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'verstak':
+                        verstak_nalichie = True
             return verstak_nalichie
 
         def koster_proverka(hero):
             x, y = hero.pos
             # проверка на наличие костра вокруг игрока
             koster_nalichie = False
-            if 'koster' in level_map[y - 1][x - 1]:
-                koster_nalichie = True
-            if 'koster' in level_map[y - 1][x]:
-                koster_nalichie = True
-            if 'koster' in level_map[y - 1][x + 1]:
-                koster_nalichie = True
-            if 'koster' in level_map[y][x - 1]:
-                koster_nalichie = True
-            if 'koster' in level_map[y][x + 1]:
-                koster_nalichie = True
-            if 'koster' in level_map[y + 1][x - 1]:
-                koster_nalichie = True
-            if 'koster' in level_map[y + 1][x]:
-                koster_nalichie = True
-            if 'koster' in level_map[y + 1][x + 1]:
-                koster_nalichie = True
+            pervoe = 3
+            vtoroe = 3
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'koster':
+                        koster_nalichie = True
             return koster_nalichie
 
+        def randomnoe_dvigenie(x_d, y_d, x, y):
+            povorot = random.randint(1, 5)
+            if povorot == 1 and level_map[y + y_d - 6][x + x_d - 9] == '0':
+                level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
+                level_map[y + y_d - 5][x + x_d - 9] = '0'
+            if povorot == 2 and level_map[y + y_d - 5][x + x_d - 10] == '0':
+                level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
+                level_map[y + y_d - 5][x + x_d - 9] = '0'
+            if povorot == 3 and level_map[y + y_d - 5][x + x_d - 9] == '0':
+                level_map[y + y_d - 6][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
+                level_map[y + y_d - 5][x + x_d - 9] = '0'
+            if povorot == 4 and level_map[y + y_d - 5][x + x_d - 9] == '0':
+                level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
+                level_map[y + y_d - 5][x + x_d - 9] = '0'
+
         def dvigenie_mobov(player):
+            # враждебные мобы способны отбегать от игрока, но они всегда возвращаются
             x_dvig = 19
             y_dvig = 11
             x, y = player.pos
@@ -1702,19 +1157,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + y_d - 5][x + x_d - 9] = '0'
                             dvig = 1
                         if dvig == 0:
-                            povorot = random.randint(1, 5)
-                            if povorot == 1 and level_map[y + y_d - 6][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 2 and level_map[y + y_d - 5][x + x_d - 10] == '0':
-                                level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 3 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 4 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            randomnoe_dvigenie(x_d, y_d, x, y)
                     elif 'lisa' in level_map[y + y_d - 5][x + x_d - 9]:
                         dvig = 0
                         if x - 4 < x + x_d - 9 < x and level_map[y + y_d - 5][x + x_d - 8] == '0' and \
@@ -1745,20 +1188,10 @@ class StarveSurvival(QMainWindow, QWidget):
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 4
+                        if level_map[y + y_d - 5][x + x_d - 9] == '#':
+                            dvig = 1
                         if dvig == 0:
-                            povorot = random.randint(1, 5)
-                            if povorot == 1 and level_map[y + y_d - 6][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 2 and level_map[y + y_d - 5][x + x_d - 10] == '0':
-                                level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 3 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 4 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            randomnoe_dvigenie(x_d, y_d, x, y)
                     elif 'wolf' in level_map[y + y_d - 5][x + x_d - 9]:
                         dvig = 0
                         if x - 4 < x + x_d - 9 < x and level_map[y + y_d - 5][x + x_d - 8] == '0' and \
@@ -1789,20 +1222,18 @@ class StarveSurvival(QMainWindow, QWidget):
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 4
+                        # if level_map[y + y_d - 5][x + x_d - 8] == '#':
+                            # dvig = 1
+                        # elif level_map[y + y_d - 5][x + x_d - 10] == '#':
+                            # dvig = 1
+                        # elif level_map[y + y_d - 6][x + x_d - 9] == '#':
+                            # dvig = 1
+                        # elif level_map[y + y_d - 4][x + x_d - 9] == '#':
+                            # dvig = 1
+                        if level_map[y + y_d - 5][x + x_d - 9] == '#':
+                            dvig = 1
                         if dvig == 0:
-                            povorot = random.randint(1, 5)
-                            if povorot == 1 and level_map[y + y_d - 6][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 2 and level_map[y + y_d - 5][x + x_d - 10] == '0':
-                                level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 3 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 6][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
-                            if povorot == 4 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                                level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                                level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            randomnoe_dvigenie(x_d, y_d, x, y)
 
         def yron_mobov(player):
             x, y = player.pos
@@ -1848,41 +1279,19 @@ class StarveSurvival(QMainWindow, QWidget):
                 elif 'wolf' in level_map[y - 1][x - 1]:
                     inventar[-3][1] = str(int(inventar[-3][1]) - 20)
 
-        def maso_zaiz():
+        def maso_v(scolco):
+            # добавляет мясо в инвентарь
             dob = 0
             for inv in inventar:
                 if 'maso_siroe' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + scolco
                     dob = 1
+                    break
             for inv in inventar:
                 if 'pusto' in inv and dob != 1:
                     inventar[int(inv[0]) - 1][1] = 'maso_siroe'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
-                    dob = 1
-
-        def maso_lisa():
-            dob = 0
-            for inv in inventar:
-                if 'maso_siroe' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 2
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'maso_siroe'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 2
-                    dob = 1
-
-        def maso_wolf():
-            dob = 0
-            for inv in inventar:
-                if 'maso_siroe' in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 3
-                    dob = 1
-            for inv in inventar:
-                if 'pusto' in inv and dob != 1:
-                    inventar[int(inv[0]) - 1][1] = 'maso_siroe'
-                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + 3
-                    dob = 1
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + scolco
+                    break
 
         def yron_po(player):
             x, y = player.pos
@@ -1891,6 +1300,7 @@ class StarveSurvival(QMainWindow, QWidget):
             y_ydar = event.pos[1]
             pervoe = 3
             vtoroe = 2
+            # проверка ударили ли вы кого нибудь
             if x_ydar > y_ydar < 360 and x_ydar + y_ydar < 720:
                 for ne_i in range(vtoroe):
                     for ne_i2 in range(pervoe):
@@ -1900,7 +1310,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
-                                maso_lisa()
+                                maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y - ne_i - 1][x - 1 + ne_i2]:
                             mob = level_map[y - ne_i - 1][x - 1 + ne_i2].split()
@@ -1908,7 +1318,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
-                                maso_wolf()
+                                maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y - ne_i - 1][x - 1 + ne_i2]:
                             mob = level_map[y - ne_i - 1][x - 1 + ne_i2].split()
@@ -1916,7 +1326,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
-                                maso_zaiz()
+                                maso_v(1)
                                 spawn_resursa('zaiz 25')
             if y_ydar < x_ydar > 360 and x_ydar + y_ydar > 720:
                 for ne_i in range(vtoroe):
@@ -1927,7 +1337,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
-                                maso_lisa()
+                                maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i2 - 1][x + 1 + ne_i]:
                             mob = level_map[y + ne_i2 - 1][x + 1 + ne_i].split()
@@ -1935,7 +1345,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
-                                maso_wolf()
+                                maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i2 - 1][x + 1 + ne_i]:
                             mob = level_map[y + ne_i2 - 1][x + 1 + ne_i].split()
@@ -1943,7 +1353,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
-                                maso_zaiz()
+                                maso_v(1)
                                 spawn_resursa('zaiz 25')
             if x_ydar < y_ydar > 360 and x_ydar + y_ydar > 720:
                 for ne_i in range(vtoroe):
@@ -1954,7 +1364,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
-                                maso_lisa()
+                                maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i + 1][x - 1 + ne_i2]:
                             mob = level_map[y + ne_i + 1][x - 1 + ne_i2].split()
@@ -1962,7 +1372,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
-                                maso_wolf()
+                                maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i + 1][x - 1 + ne_i2]:
                             mob = level_map[y + ne_i + 1][x - 1 + ne_i2].split()
@@ -1970,7 +1380,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
                                 level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
-                                maso_zaiz()
+                                maso_v(1)
                                 spawn_resursa('zaiz 25')
             if y_ydar > x_ydar < 360 and x_ydar + y_ydar < 720:
                 for ne_i in range(vtoroe):
@@ -1981,7 +1391,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
-                                maso_lisa()
+                                maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i2 - 1][x - 1 - ne_i]:
                             mob = level_map[y + ne_i2 - 1][x - 1 - ne_i].split()
@@ -1989,7 +1399,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
-                                maso_wolf()
+                                maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i2 - 1][x - 1 - ne_i]:
                             mob = level_map[y + ne_i2 - 1][x - 1 - ne_i].split()
@@ -1997,7 +1407,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
                                 level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
-                                maso_zaiz()
+                                maso_v(1)
                                 spawn_resursa('zaiz 25')
 
         def rezim_vstavka_bloca_pokaz():
@@ -2011,7 +1421,6 @@ class StarveSurvival(QMainWindow, QWidget):
             ris_invent = pn.get_rect().move(575, 340)
             screen.blit(pn, ris_invent)
 
-        # with open(self.file_name, 'r') as f:
         WIDTH, HEIGHT = 1280, 720
 
         tile_width = tile_height = 75
@@ -2019,9 +1428,8 @@ class StarveSurvival(QMainWindow, QWidget):
 
         inventar = inventar_skachivanie(self.file_name)
 
-        screen_size = (450, 800)
-        # screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
         screen = pygame.display.set_mode((1280, 720))
+        # получение обьектов из памяти
         tile_images = {
             'empty': load_image('grass.png'),
             'tree': load_image('tree.png'),
@@ -2066,9 +1474,8 @@ class StarveSurvival(QMainWindow, QWidget):
 
         generate_level_kust(level_map)
 
-
-
         mir = 10
+        # размеры мира
         if 100 > len(level_map) > 50:
             mir = 50
         elif 150 > len(level_map) > 100:
@@ -2076,25 +1483,22 @@ class StarveSurvival(QMainWindow, QWidget):
         elif len(level_map) > 200:
             mir = 200
 
-
-
-
         clock = pygame.time.Clock()
 
-        FPS = 60
+        # FPS = 60
         running = True
         # start_screen()
-        y = 0
-        x = 0
+        # y = 0
+        # x = 0
         bb = 1
         obnovlenie = 0
         lomanie = 0
         spisok_koord_craft = []
-        q1 = 0
-        w1 = 0
-        e1 = 0
-        r1 = 0
-        t1 = 0
+        # q1 = 0
+        # w1 = 0
+        # e1 = 0
+        # r1 = 0
+        # t1 = 0
         stavka_predmeta = []
         rezim_vstavka_bloca = 0
         sila = 0
@@ -2106,21 +1510,18 @@ class StarveSurvival(QMainWindow, QWidget):
 
         with open('nastroiki_mira/' + self.file_name.split('/')[-1], 'r') as nygno:
             lvl = nygno.read().split('%_%')
-            lvl[1] = int(lvl[1])
-            lvl[2] = int(lvl[2])
 
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        sys.exit()
                 if event.type == pygame.KEYDOWN and konez == 0:
+                    # кнопки на которые ходит персонаж
                     if event.key == pygame.K_UP:
                         move(player, 'up')
-                        # camera.update(player)
-                        # обновляем положение всех спрайтов
-                        # for sprite in all_sprites:
-                        # if 'Player' not in str(sprite):
-                        # camera.apply2(sprite)
                         lomanie = 0
                         bb = 1
                     if event.key == pygame.K_DOWN:
@@ -2137,11 +1538,6 @@ class StarveSurvival(QMainWindow, QWidget):
                         lomanie = 0
                     if event.key == pygame.K_w:
                         move(player, 'up')
-                        # camera.update(player)
-                        # обновляем положение всех спрайтов
-                        # for sprite in all_sprites:
-                        # if 'Player' not in str(sprite):
-                        # camera.apply2(sprite)
                         lomanie = 0
                         bb = 1
                     if event.key == pygame.K_s:
@@ -2182,6 +1578,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             if event.pos[0] < (spi_koord[0] + 1) * spi_koord[2] + 1 and event.pos[1] < (spi_koord[
                                     1] + 1) * spi_koord[2] + 1 and f == 0:
                                 f = 1
+                                # проверка какой предмет крафтится
                                 if spi_koord[3] == 'kirka':
                                     craft_cirki()
                                 elif spi_koord[3] == 'mech':
@@ -2218,10 +1615,6 @@ class StarveSurvival(QMainWindow, QWidget):
                                     craft_mech_diamond()
                                 elif spi_koord[3] == 'mech_ametist':
                                     craft_mech_ametist()
-
-
-
-                                    # 365 + (int(i[0]) * 50), 670
                     f = 0
                     for i in range(9):
                         if 365 + (i + 1) * 50 < event.pos[0] < 366 + (
@@ -2229,6 +1622,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             sila = 0
                             yron = 0
                             rezim_vstavka_bloca = 0
+                            # проверка, на какой предмет нажали и включение соответствующего режима
                             if 'stena_derevo' in inventar[i]:
                                 stavka_predmeta = inventar[i]
                                 stavka_bloka_vkl()
@@ -2307,6 +1701,7 @@ class StarveSurvival(QMainWindow, QWidget):
                                 rezim_vstavka_bloca = 0
                 if (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN) and konez == 1:
                     konez = 0
+                    # перезапись, на пустой инвентарь
                     level2 = ['1 pusto 0%2 pusto 0%3 pusto 0%4 pusto 0%5 pusto 0%6 pusto 0%7 pusto 0%8 pusto 0%9 pusto 0%HP 100%food 100%cold 100']
                     inventar_spisok = []
                     for lev in level2:
@@ -2324,20 +1719,22 @@ class StarveSurvival(QMainWindow, QWidget):
             screen.fill(pygame.Color('black'))
             obnovlenie += 1
             if obnovlenie == 270:
+                # обновляет статы
                 obnovlenie = 0
                 if int(inventar[-1][1]) > 0:
-                    inventar[-1][1] = str(int(inventar[-1][1]) - 1)
+                    inventar[-1][1] = str(int(inventar[-1][1]) - 1 * int(lvl[1]))
                 else:
-                    inventar[-3][1] = str(int(inventar[-3][1]) - 9)
+                    inventar[-3][1] = str(int(inventar[-3][1]) - 9 * int(lvl[1]))
                 if koster_proverka(player) and int(inventar[-1][1]) < 100:
                     inventar[-1][1] = str(int(inventar[-1][1]) + 10)
                 if int(inventar[-2][1]) > 75 and int(inventar[-1][1]) > 75:
                     inventar[-3][1] = str(int(inventar[-3][1]) + 10)
                 if int(inventar[-2][1]) > 0:
-                    inventar[-2][1] = str(int(inventar[-2][1]) - 3)
+                    inventar[-2][1] = str(int(inventar[-2][1]) - 3 * int(lvl[1]))
                 else:
-                    inventar[-3][1] = str(int(inventar[-3][1]) - 9)
+                    inventar[-3][1] = str(int(inventar[-3][1]) - 9 * int(lvl[1]))
             if len(kusti) != 0:
+                # проверяет кусты, и выращивает на них ягоды
                 for chet in range(len(kusti))[::-1]:
                     kust = kusti[chet][2].split()
                     kust[2] = str(int(kust[2]) - 1)
@@ -2386,11 +1783,13 @@ class StarveSurvival(QMainWindow, QWidget):
             inventar_spawn()
             craft_spawn()
             obnovlenie_mobov += 1
-            if obnovlenie_mobov == 90:
+            if obnovlenie_mobov == 45:
+                # двигает мобов
                 yron_mobov(player)
                 dvigenie_mobov(player)
                 obnovlenie_mobov = 0
             if int(inventar[-3][1]) <= 0:
+                # проверяет здоровье, и если оно ниже, то персонажем нельзя управлять и вещи теряются
                 font = pygame.font.Font(None, 80)
                 text = font.render(str('Вы погибли'), 1, (0, 0, 0))
                 screen.blit(text, (380, 200))
@@ -2400,12 +1799,20 @@ class StarveSurvival(QMainWindow, QWidget):
                 screen.blit(text, (280, 300))
                 inventar[-3][1] = '-10000'
                 konez = 1
+                sila = 0
+                yron = 0
+                rezim_vstavka_bloca = 0
             pygame.display.flip()
             clock.tick(50)
 
+            # сохранение мира
             maaaaap = ''
             for i in level_map:
                 maaaaap += '\n' + '%'.join(i)
+            maaaaap = maaaaap.split('\n')
+            while len(maaaaap[0]) == 0:
+                del maaaaap[0]
+            maaaaap = '\n'.join(maaaaap)
             with open('mir/' + lvl[0] + '.txt', 'w') as f:
                 f.write(''.join(maaaaap))
 

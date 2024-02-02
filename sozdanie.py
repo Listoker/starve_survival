@@ -1,6 +1,6 @@
 import os
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QScrollArea, QFormLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QScrollArea, QFormLayout
 from PyQt5.QtCore import pyqtSignal
 import random
 from PyQt5 import QtWidgets
@@ -20,7 +20,6 @@ class Generachia(QWidget):
         self.x = 1280
         self.y = 720
         self.setupUI()
-
 
     def setupUI(self):
         self.setGeometry(0, 0, 1280, 720)
@@ -44,8 +43,6 @@ class Generachia(QWidget):
         self.o3.resize(int(self.x / 9.6), int(self.y / 10.8))
         self.o3.setStyleSheet('QLabel {background-color: ' + self.cvet[0] + '; color: #C0C0C0;}')
 
-
-
         self.okno1 = QPushButton('Начать игру', self)
         self.okno1.move(660, int(self.y / 1.54))
         self.okno1.resize(570, int(self.y / 10.8))
@@ -57,8 +54,6 @@ class Generachia(QWidget):
         self.okno1.resize(570, int(self.y / 10.8))
         self.okno1.clicked.connect(self.otmena)
         self.okno1.setStyleSheet('QPushButton {background-color: #A3C1DA}')
-
-
 
         self.okno11 = QPushButton('простая', self)
         self.okno11.move(50, int(self.y / 3.48))
@@ -78,15 +73,11 @@ class Generachia(QWidget):
         self.okno13.clicked.connect(self.hardkor)
         self.okno13.setStyleSheet('QPushButton {background-color: #A3C1DA}')
 
-
-
         self.first_value = QLineEdit(self)
         self.first_value.move(50, int(self.y / 10.8))
         self.first_value.resize(1180, int(self.y / 10.8))
         self.first_value.setText('Новый мир')
         self.first_value.setStyleSheet('QLineEdit {background-color: #A3C1DA}')
-
-
 
         self.okno211 = QPushButton('маленький', self)
         self.okno211.move(50, int(self.y / 2.16))
@@ -151,7 +142,6 @@ class Generachia(QWidget):
         r = 10
         t = 2
         mir = 1000
-        spawn = 1
 
         wolk = 20
         lisa = 15
@@ -263,7 +253,7 @@ class Pomoch(QWidget):
                          '10 игру можно открыть на полный экран, нажав f11\n'
                          '11 если показатель хп упадет до 0, то вы погибните\n'
                          '12 если вы находитесь рядом с верстаком, то доступно больше крафтов\n'
-                         '\n', self)
+                         '13 чтобы выйти из игры, нажмите esc\n', self)
         self.o1.move(10, 10)
         self.o1.resize(int(1200), int(400))
         self.o1.setStyleSheet('QLabel {background-color: ' + self.cvet[0] + '; color: #C0C0C0;}')
@@ -299,33 +289,26 @@ class VseMiri(QWidget):
         spisok_mirov = os.listdir(f'{doroga}/mir')
 
         mygroupbox = QtWidgets.QGroupBox('')
-        myform = QFormLayout()
+        forma = QFormLayout()
         labellist = []
-        myform.addRow(self.o1)
+        forma.addRow(self.o1)
         vihod = QPushButton("Выйти")
         vihod.setStyleSheet('QPushButton {background-color: #FFFFFF}')
         vihod.clicked.connect(self.zakritie)
-        myform.addRow(vihod)
+        forma.addRow(vihod)
         for i in range(len(spisok_mirov)):
             labellist.append(QPushButton(spisok_mirov[i], self))
             labellist[i].setStyleSheet('QPushButton {background-color: #A3C1DA}')
             labellist[i].clicked.connect(self.mir)
-            myform.addRow(labellist[i])
+            forma.addRow(labellist[i])
 
-        mygroupbox.setLayout(myform)
+        mygroupbox.setLayout(forma)
         scroll = QScrollArea()
         scroll.setWidget(mygroupbox)
         scroll.setWidgetResizable(True)
         scroll.setFixedHeight(700)
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(scroll)
-
-        # for i in range(len(spisok_mirov)):
-            # self.okno211 = QPushButton(spisok_mirov[i], self)
-            # self.okno211.move(int(self.x / 192), 60 + 55 * i)
-            #self.okno211.resize(500, int(50))
-            #self.okno211.clicked.connect(self.mir)
-            #self.okno211.setStyleSheet('QPushButton {background-color: #A3C1DA}')
 
     def zakritie(self):
         VseMiri.close(self)
@@ -342,10 +325,3 @@ class VseMiri(QWidget):
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    example = Generachia()
-    example.show()
-    sys.exit(app.exec())
