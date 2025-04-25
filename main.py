@@ -164,6 +164,8 @@ class StarveSurvival(QMainWindow, QWidget):
                         Tile('block_diamond', x, y)
                     elif 'block_ametist' in level[y][x]:
                         Tile('block_ametist', x, y)
+                    elif 'chest' in level[y][x]:
+                        Tile('chest', x, y)
             # вернем игрока, а также размер поля в клетках
             return new_player, x, y
 
@@ -336,6 +338,12 @@ class StarveSurvival(QMainWindow, QWidget):
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
                     text_napisanie_chisla(i)
+                elif 'chest' in i:
+                    pn = pygame.image.load('data/chest_craft.png')
+                    ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
+                    screen.blit(pn, ris_invent)
+                    text_napisanie_chisla(i)
+
 
                 elif 'HP' in i:
                     hp = int(i[1]) / 100
@@ -540,6 +548,15 @@ class StarveSurvival(QMainWindow, QWidget):
                 ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
                 screen.blit(pn, ris_invent)
                 spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'mech_ametist'])
+                craft_chislo_x += 1
+                if craft_chislo_x >= 5:
+                    craft_chislo_x = 0
+                    craft_chislo_y += 1
+            if q1 >= 70 and w1 > 20:
+                pn = pygame.image.load('data/chest_craft.png')
+                ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
+                screen.blit(pn, ris_invent)
+                spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'chest'])
                 craft_chislo_x += 1
                 if craft_chislo_x >= 5:
                     craft_chislo_x = 0
@@ -844,6 +861,21 @@ class StarveSurvival(QMainWindow, QWidget):
             v_inventar('drevesina', q1)
             v_inventar('kamen_inv', w1)
 
+        def craft_chest():
+            dobavlenie_predmeta_v('chest')
+            q1 = 0
+            w1 = 0
+            spisok_koord_craft.clear()
+            for i in inventar:
+                if 'drevesina' in i:
+                    q1 += int(i[2])
+                elif 'kamen_inv' in i:
+                    w1 += int(i[2])
+            q1 -= 70
+            w1 -= 20
+            v_inventar('drevesina', q1)
+            v_inventar('kamen_inv', w1)
+
         def craft_koster():
             dobavlenie_predmeta_v('koster')
             q1 = 0
@@ -1039,6 +1071,8 @@ class StarveSurvival(QMainWindow, QWidget):
                 block = 's_d'
             elif 'verstak' in stavka_predmeta:
                 block = 'verstak'
+            elif 'chest' in stavka_predmeta:
+                block = 'chest'
             elif 'koster' in stavka_predmeta:
                 block = 'koster'
             elif 'stena_kamen' in stavka_predmeta:
@@ -1454,7 +1488,8 @@ class StarveSurvival(QMainWindow, QWidget):
             'stena_kamen': load_image('stena_kamen.png'),
             'block_gold': load_image('block_gold.png'),
             'block_diamond': load_image('block_diamond.png'),
-            'block_ametist': load_image('block_ametist.png')
+            'block_ametist': load_image('block_ametist.png'),
+            'chest': load_image('chest.png')
         }
         player_image = {
             'mar': load_image('mar.webp'),
@@ -1589,6 +1624,8 @@ class StarveSurvival(QMainWindow, QWidget):
                                     craft_verstak()
                                 elif spi_koord[3] == 'koster':
                                     craft_koster()
+                                elif spi_koord[3] == 'chest':
+                                    craft_chest()
                                 elif spi_koord[3] == 'kirka_kamen':
                                     craft_kirki_kamen()
                                 elif spi_koord[3] == 'kirka_gold':
@@ -1630,6 +1667,10 @@ class StarveSurvival(QMainWindow, QWidget):
                             elif 'kirka_derevo' in inventar[i]:
                                 sila = 1
                             elif 'verstak' in inventar[i]:
+                                stavka_predmeta = inventar[i]
+                                stavka_bloka_vkl()
+                                rezim_vstavka_bloca = 1
+                            elif 'chest' in inventar[i]:
                                 stavka_predmeta = inventar[i]
                                 stavka_bloka_vkl()
                                 rezim_vstavka_bloca = 1
