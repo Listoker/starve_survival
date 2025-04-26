@@ -366,6 +366,150 @@ class StarveSurvival(QMainWindow, QWidget):
                     # а 93 118 203 - Индиго Крайола
                     pygame.draw.rect(screen, (93, 118, 203), (718, 648, int(144 * hp), 19))
 
+        def text_napisanie_chisla_chest(i):
+            font = pygame.font.Font(None, 30)
+            text = font.render(str(i[-1]), 1, (100, 100, 100))
+            screen.blit(text, (1100 + int(i[0]) * 50, 30))
+
+        def chest_spawn(nomer):
+            i = nomer.split()
+            # проверка какие предметы в сундуке и их спавн в окне игры
+            if 'pusto' in i:
+                pn = pygame.image.load('data/pusto.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+            elif 'drevesina' in i:
+                pn = pygame.image.load('data/drevesina.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kamen_inv' in i:
+                pn = pygame.image.load('data/kamen_inv.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kirka_derevo' in i:
+                pn = pygame.image.load('data/kirka_derevo.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'mech_derevo' in i:
+                pn = pygame.image.load('data/mech_derevo.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'stena_derevo' in i:
+                pn = pygame.image.load('data/stena_derevo_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'verstak' in i:
+                pn = pygame.image.load('data/verstak_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'koster' in i:
+                pn = pygame.image.load('data/koster_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'gold_inv' in i:
+                pn = pygame.image.load('data/gold_inv.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'diamond_inv' in i:
+                pn = pygame.image.load('data/diamond_inv.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'ametist_inv' in i:
+                pn = pygame.image.load('data/ametist_inv.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kirka_kamen' in i:
+                pn = pygame.image.load('data/kirka_kamen.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kirka_gold' in i:
+                pn = pygame.image.load('data/kirka_gold.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kirka_diamond' in i:
+                pn = pygame.image.load('data/kirka_diamond.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'kirka_ametist' in i:
+                pn = pygame.image.load('data/kirka_ametist.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'agoda' in i:
+                pn = pygame.image.load('data/agoda.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'maso_siroe' in i:
+                pn = pygame.image.load('data/maso_siroe.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'maso_jarenoe' in i:
+                pn = pygame.image.load('data/maso_jarenoe.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'stena_kamen' in i:
+                pn = pygame.image.load('data/stena_kamen_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'block_gold' in i:
+                pn = pygame.image.load('data/block_gold_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'block_diamond' in i:
+                pn = pygame.image.load('data/block_diamond_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'block_ametist' in i:
+                pn = pygame.image.load('data/block_ametist_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'mech_kamen' in i:
+                pn = pygame.image.load('data/mech_kamen.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'mech_gold' in i:
+                pn = pygame.image.load('data/mech_gold.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'mech_diamond' in i:
+                pn = pygame.image.load('data/mech_diamond.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'mech_ametist' in i:
+                pn = pygame.image.load('data/mech_ametist.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            elif 'chest' in i:
+                pn = pygame.image.load('data/chest_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i)
+            spisok_koord_chest.append([1080 + (int(i[0]) * 50) + 50, 50, int(i[0]), i[1], int(i[2])])
+
         def craft_spawn():
             q1 = 0
             w1 = 0
@@ -762,6 +906,64 @@ class StarveSurvival(QMainWindow, QWidget):
                     inventar[int(inv[0]) - 1][2] = int(inv[2]) + 1
                     break
 
+        def dobavlenie_predmeta_v_most_inv(predmet, w1, hero, nomer, nomer_v):
+            # добавляет предмет в инвентарь
+            dob = 0
+            for inv in inventar:
+                if predmet in inv and dob != 1 and int(inventar[int(inv[0]) - 1][2]) < 355:
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + w1
+                    dob = 1
+                    break
+            for inv in inventar:
+                if 'pusto' in inv and dob != 1:
+                    inventar[int(inv[0]) - 1][1] = predmet
+                    inventar[int(inv[0]) - 1][2] = int(inv[2]) + w1
+                    break
+            x, y = hero.pos
+            # проверка на наличие сундуков вокруг игрока
+            pervoe = 3
+            vtoroe = 3
+            nomer_chest = -1
+            dob = 0
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2] and dob == 0:
+                        nomer_chest += 1
+                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
+                        invent_chest[nomer_v] = f"{nomer_v} pusto 0"
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
+                        dob = 1
+
+        def dobavlenie_predmeta_v_most_chest(predmet, w1, hero):
+            x, y = hero.pos
+            # проверка на наличие сундуков вокруг игрока
+            pervoe = 3
+            vtoroe = 3
+            dob = 0
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
+            # добавляет предмет в инвентарь
+                        for invv in invent_chest:
+                            inv = invv.split()
+                            if predmet in inv and dob != 1 and int(inv[2]) < 355:
+                                inv[2] = str(int(inv[2]) + w1)
+                                inv = ' '.join(inv)
+                                invent_chest[invent_chest.index(invv)] = inv
+                                level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
+                                dob = 1
+                                break
+                        for invv in invent_chest:
+                            inv = invv.split()
+                            if 'pusto' in inv and dob != 1:
+                                inv[2] = str(w1)
+                                inv[1] = predmet
+                                inv = ' '.join(inv)
+                                invent_chest[invent_chest.index(invv)] = inv
+                                level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
+                                break
+
         # дальше идут крафты
         def craft_cirki():
             dobavlenie_predmeta_v('kirka_derevo')
@@ -1072,7 +1274,7 @@ class StarveSurvival(QMainWindow, QWidget):
             elif 'verstak' in stavka_predmeta:
                 block = 'verstak'
             elif 'chest' in stavka_predmeta:
-                block = 'chest'
+                block = 'chest&1 pusto 0&2 pusto 0&3 pusto 0'
             elif 'koster' in stavka_predmeta:
                 block = 'koster'
             elif 'stena_kamen' in stavka_predmeta:
@@ -1129,6 +1331,19 @@ class StarveSurvival(QMainWindow, QWidget):
                     if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'verstak':
                         verstak_nalichie = True
             return verstak_nalichie
+
+        def chest_proverka(hero):
+            x, y = hero.pos
+            # проверка на наличие сундуков вокруг игрока
+            pervoe = 3
+            vtoroe = 3
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
+                        for nomer in invent_chest[1:]:
+                            chest_spawn(nomer)
+
 
         def koster_proverka(hero):
             x, y = hero.pos
@@ -1529,6 +1744,7 @@ class StarveSurvival(QMainWindow, QWidget):
         obnovlenie = 0
         lomanie = 0
         spisok_koord_craft = []
+        spisok_koord_chest = []
         # q1 = 0
         # w1 = 0
         # e1 = 0
@@ -1600,13 +1816,27 @@ class StarveSurvival(QMainWindow, QWidget):
                         for i in range(9):
                             if 365 + (i + 1) * 50 < event.pos[0] < 366 + (
                                     i + 2) * 50 and 670 < event.pos[1] and f == 0:
+                                if len(spisok_koord_chest) != 0:
+                                    dobavlenie_predmeta_v_most_chest(inventar[i][1],
+                                                                     int(inventar[i][2]), player)
                                 inventar[i] = [str(i + 1), 'pusto', '0']
+
                     if rezim_vstavka_bloca == 0:
                         if event.button == 1:
                             lomanie += 1
                             dobicha(player)
                     if event.button == 1 and yron > 0:
                         yron_po(player)
+                    if len(spisok_koord_chest) != 0:
+                        f = 0
+                        nomer = -1
+                        for spi_koord in spisok_koord_chest:
+                            nomer += 1
+                            if 1130 < event.pos[0] < (spi_koord[0] + 1) + 1 and event.pos[1] < (spi_koord[
+                                    1] + 1) + 1 and f == 0:
+                                f = 1
+                                print(spisok_koord_chest[nomer][-2])
+                                dobavlenie_predmeta_v_most_inv(spisok_koord_chest[nomer][-2], spisok_koord_chest[nomer][-1], player, nomer, spisok_koord_chest[nomer][-3])
                     if len(spisok_koord_craft) != 0:
                         f = 0
                         for spi_koord in spisok_koord_craft:
@@ -1822,6 +2052,8 @@ class StarveSurvival(QMainWindow, QWidget):
             elif yron == 40:
                 rezim_kirki('mech_ametist')
             inventar_spawn()
+            spisok_koord_chest.clear()
+            chest_proverka(player)
             craft_spawn()
             obnovlenie_mobov += 1
             if obnovlenie_mobov == 45:
