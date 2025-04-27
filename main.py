@@ -366,149 +366,149 @@ class StarveSurvival(QMainWindow, QWidget):
                     # а 93 118 203 - Индиго Крайола
                     pygame.draw.rect(screen, (93, 118, 203), (718, 648, int(144 * hp), 19))
 
-        def text_napisanie_chisla_chest(i):
+        def text_napisanie_chisla_chest(i, nomer_sunduka):
             font = pygame.font.Font(None, 30)
             text = font.render(str(i[-1]), 1, (100, 100, 100))
-            screen.blit(text, (1100 + int(i[0]) * 50, 30))
+            screen.blit(text, (1100 + int(i[0]) * 50, 30 + 50 * nomer_sunduka))
 
-        def chest_spawn(nomer):
+        def chest_spawn(nomer, nomer_sunduka):
             i = nomer.split()
             # проверка какие предметы в сундуке и их спавн в окне игры
             if 'pusto' in i:
                 pn = pygame.image.load('data/pusto.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
             elif 'drevesina' in i:
                 pn = pygame.image.load('data/drevesina.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kamen_inv' in i:
                 pn = pygame.image.load('data/kamen_inv.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kirka_derevo' in i:
                 pn = pygame.image.load('data/kirka_derevo.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'mech_derevo' in i:
                 pn = pygame.image.load('data/mech_derevo.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'stena_derevo' in i:
                 pn = pygame.image.load('data/stena_derevo_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'verstak' in i:
                 pn = pygame.image.load('data/verstak_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'koster' in i:
                 pn = pygame.image.load('data/koster_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'gold_inv' in i:
                 pn = pygame.image.load('data/gold_inv.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'diamond_inv' in i:
                 pn = pygame.image.load('data/diamond_inv.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'ametist_inv' in i:
                 pn = pygame.image.load('data/ametist_inv.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kirka_kamen' in i:
                 pn = pygame.image.load('data/kirka_kamen.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kirka_gold' in i:
                 pn = pygame.image.load('data/kirka_gold.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kirka_diamond' in i:
                 pn = pygame.image.load('data/kirka_diamond.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'kirka_ametist' in i:
                 pn = pygame.image.load('data/kirka_ametist.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'agoda' in i:
                 pn = pygame.image.load('data/agoda.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'maso_siroe' in i:
                 pn = pygame.image.load('data/maso_siroe.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'maso_jarenoe' in i:
                 pn = pygame.image.load('data/maso_jarenoe.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'stena_kamen' in i:
                 pn = pygame.image.load('data/stena_kamen_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'block_gold' in i:
                 pn = pygame.image.load('data/block_gold_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'block_diamond' in i:
                 pn = pygame.image.load('data/block_diamond_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'block_ametist' in i:
                 pn = pygame.image.load('data/block_ametist_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'mech_kamen' in i:
                 pn = pygame.image.load('data/mech_kamen.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'mech_gold' in i:
                 pn = pygame.image.load('data/mech_gold.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'mech_diamond' in i:
                 pn = pygame.image.load('data/mech_diamond.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'mech_ametist' in i:
                 pn = pygame.image.load('data/mech_ametist.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'chest' in i:
                 pn = pygame.image.load('data/chest_craft.png')
-                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 0)
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
-                text_napisanie_chisla_chest(i)
-            spisok_koord_chest.append([1080 + (int(i[0]) * 50) + 50, 50, int(i[0]), i[1], int(i[2])])
+                text_napisanie_chisla_chest(i, nomer_sunduka)
+            spisok_koord_chest.append([1080 + (int(i[0]) * 50) + 50, 50, nomer_sunduka, int(i[0]), i[1], int(i[2])])
 
         def craft_spawn():
             q1 = 0
@@ -929,10 +929,11 @@ class StarveSurvival(QMainWindow, QWidget):
                 for ne_i2 in range(pervoe):
                     if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2] and dob == 0:
                         nomer_chest += 1
-                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
-                        invent_chest[nomer_v] = f"{nomer_v} pusto 0"
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
-                        dob = 1
+                        if nomer_chest == nomer // 3:
+                            invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
+                            invent_chest[nomer_v] = f"{nomer_v} pusto 0"
+                            level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
+                            dob = 1
 
         def dobavlenie_predmeta_v_most_chest(predmet, w1, hero):
             x, y = hero.pos
@@ -962,6 +963,7 @@ class StarveSurvival(QMainWindow, QWidget):
                                 inv = ' '.join(inv)
                                 invent_chest[invent_chest.index(invv)] = inv
                                 level_map[y - ne_i + 1][x - 1 + ne_i2] = '&'.join(invent_chest)
+                                dob = 1
                                 break
 
         # дальше идут крафты
@@ -1337,12 +1339,14 @@ class StarveSurvival(QMainWindow, QWidget):
             # проверка на наличие сундуков вокруг игрока
             pervoe = 3
             vtoroe = 3
+            nomer_sunduka = -1
             for ne_i in range(vtoroe):
                 for ne_i2 in range(pervoe):
                     if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                        nomer_sunduka += 1
                         invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
                         for nomer in invent_chest[1:]:
-                            chest_spawn(nomer)
+                            chest_spawn(nomer, nomer_sunduka)
 
 
         def koster_proverka(hero):
@@ -1833,9 +1837,8 @@ class StarveSurvival(QMainWindow, QWidget):
                         for spi_koord in spisok_koord_chest:
                             nomer += 1
                             if 1130 < event.pos[0] < (spi_koord[0] + 1) + 1 and event.pos[1] < (spi_koord[
-                                    1] + 1) + 1 and f == 0:
+                                    1] + 1 + 50 * spi_koord[2]) + 1 and f == 0:
                                 f = 1
-                                print(spisok_koord_chest[nomer][-2])
                                 dobavlenie_predmeta_v_most_inv(spisok_koord_chest[nomer][-2], spisok_koord_chest[nomer][-1], player, nomer, spisok_koord_chest[nomer][-3])
                     if len(spisok_koord_craft) != 0:
                         f = 0
