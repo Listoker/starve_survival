@@ -124,7 +124,7 @@ class Generachia(QWidget):
             x = random.randrange(0, int(mir / 10) - 1)
             y = random.randrange(0, int(mir / 10) - 1)
 
-            while self.map_[x][y] != '0':
+            while self.map_[x][y] != 'nothing@#plain@#grass@#pusto':
                 if int(mir / 10) - 1 <= x:
                     y += 1
                     x = 0
@@ -168,43 +168,43 @@ class Generachia(QWidget):
         for i in range(int(mir / 10)):
             map2 = []
             for i in range(int(mir / 10)):
-                map2.append('0')
+                map2.append('nothing@#plain@#grass@#pusto')
             self.map_.append(map2)
         # добавление обьектов в мир
-        self.mir_sozdan(mir, q, 'q')
-        self.mir_sozdan(mir, w, 'w')
-        self.mir_sozdan(mir, e, 'e')
-        self.mir_sozdan(mir, r, 'r')
-        self.mir_sozdan(mir, t, 't')
+        self.mir_sozdan(mir, q, 'q_wood@#plain@#grass@#pusto')
+        self.mir_sozdan(mir, w, 'w_stone@#plain@#grass@#pusto')
+        self.mir_sozdan(mir, e, 'e_gold@#plain@#grass@#pusto')
+        self.mir_sozdan(mir, r, 'r_diamond@#plain@#grass@#pusto')
+        self.mir_sozdan(mir, t, 't_ametist@#plain@#grass@#pusto')
         x = random.randrange(0, int(mir / 10) - 1)
         y = random.randrange(0, int(mir / 10) - 1)
-        while self.map_[x][y] != '0':
+        while self.map_[x][y] != 'nothing@#plain@#grass@#pusto':
             if int(mir / 10) <= x:
                 y += 1
                 x = 0
                 if int(mir / 10) <= y:
                     y = 1
             x += 1
-        self.map_[x][y] = '@'
+        self.map_[x][y] = 'player@#plain@#grass@#pusto'
         # добавление животных в мир
-        self.mir_sozdan(mir, wolk, 'wolf 150')
-        self.mir_sozdan(mir, lisa, 'lisa 75')
-        self.mir_sozdan(mir, zaiz, 'zaiz 25')
-        self.mir_sozdan(mir, kust, 'kust 6 400')
+        self.mir_sozdan(mir, wolk, 'wolf 150 @#plain@#grass@#pusto')
+        self.mir_sozdan(mir, lisa, 'lisa 75 @#plain@#grass@#pusto')
+        self.mir_sozdan(mir, zaiz, 'zaiz 25 @#plain@#grass@#pusto')
+        self.mir_sozdan(mir, kust, 'kust 6 400 @#plain@#grass@#pusto')
         # добавление границ в мир
         for i in range(10):
             map2 = []
             for q in range(int(mir / 10)):
-                map2.append('water')
+                map2.append('water@#ocean@#water@#pusto')
             self.map_.insert(0, map2)
         for i in range(10):
             map2 = []
             for q in range(int(mir / 10)):
-                map2.append('water')
+                map2.append('water@#ocean@#water@#pusto')
             self.map_.append(map2)
         map2 = []
         for i in range(10):
-            map2.append('water')
+            map2.append('water@#ocean@#water@#pusto')
         maaaaap = ''
         self.lvl[0] = self.first_value.text()
         # переделывание мира в текстовый формат

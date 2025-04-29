@@ -111,22 +111,22 @@ class StarveSurvival(QMainWindow, QWidget):
                 for x in range(len(level[y])):
                     if level[y][x] == '.':
                         Tile('empty', x, y)
-                    if level[y][x] == '0':
+                    if 'nothing@#' in level[y][x]:
                         Tile('empty', x, y)
                     elif level[y][x] == '#':
                         Tile('wall', x, y)
-                    elif level[y][x] == '@':
+                    elif 'player@#' in level[y][x]:
                         Tile('empty', x, y)
                         new_player = Player(x, y)
-                    elif level[y][x] == 'q':
+                    elif 'q_wood' in level[y][x]:
                         Tile('tree', x, y)
-                    elif level[y][x] == 'w':
+                    elif 'w_stone' in level[y][x]:
                         Tile('kamen', x, y)
-                    elif level[y][x] == 'e':
+                    elif 'e_gold' in level[y][x]:
                         Tile('gold', x, y)
-                    elif level[y][x] == 'r':
+                    elif 'r_diamond' in level[y][x]:
                         Tile('diamond', x, y)
-                    elif level[y][x] == 't':
+                    elif 't_ametist' in level[y][x]:
                         Tile('ametists', x, y)
                     elif 's_d' in level[y][x]:
                         Tile('stena_derevo', x, y)
@@ -150,7 +150,7 @@ class StarveSurvival(QMainWindow, QWidget):
                         Tile('kust_6', x, y)
                     elif 'kust' in level[y][x]:
                         Tile('kust', x, y)
-                    elif level[y][x] == 'verstak':
+                    elif 'verstak' in level[y][x]:
                         Tile('verstak', x, y)
                     elif 'koster' in level[y][x]:
                         Tile('koster', x, y)
@@ -748,9 +748,9 @@ class StarveSurvival(QMainWindow, QWidget):
             # перемещение героя
             x, y = hero.pos
             if dir == 'up':
-                if y > 0 and level_map[y - 1][x] == '0':
-                    level_map[y][x] = '0'
-                    level_map[y - 1][x] = '@'
+                if y > 0 and 'nothing@#' in level_map[y - 1][x]:
+                    level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
+                    level_map[y - 1][x] = level_map[y][x].replace('nothing@#', 'player@#')
                     y -= 1
                     camera.update(player)
                     # обновляем положение всех спрайтов
@@ -759,28 +759,28 @@ class StarveSurvival(QMainWindow, QWidget):
                             camera.apply2(sprite)
             elif dir == 'down':
                 if y < len(level_map) and level_map[y + 1][x] == '.' or level_map[y + 1][x] == '@' \
-                        or level_map[y + 1][x] == '0':
-                    level_map[y][x] = '0'
-                    level_map[y + 1][x] = '@'
+                        or 'nothing@#' in level_map[y + 1][x]:
+                    level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
+                    level_map[y + 1][x] = level_map[y][x].replace('nothing@#', 'player@#')
                     y += 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply3(sprite)
             elif dir == 'left':
-                if x > 0 and level_map[y][x - 1] == '.' or level_map[y][x - 1] == '@' or level_map[y][x - 1] == '0':
+                if x > 0 and level_map[y][x - 1] == '.' or level_map[y][x - 1] == '@' or 'nothing@#' in level_map[y][x - 1]:
                     # hero.move(x, y)
-                    level_map[y][x] = '0'
-                    level_map[y][x - 1] = '@'
+                    level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
+                    level_map[y][x - 1] = level_map[y][x].replace('nothing@#', 'player@#')
                     x -= 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply4(sprite)
             elif dir == 'right':
                 if x < len(level_map) and level_map[y][x + 1] == '.' or level_map[y][x + 1] == '@'\
-                        or level_map[y][x + 1] == '0':
+                        or 'nothing@#' in level_map[y][x + 1]:
                     # hero.move(x, y)
-                    level_map[y][x] = '0'
-                    level_map[y][x + 1] = '@'
+                    level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
+                    level_map[y][x + 1] = level_map[y][x].replace('nothing@#', 'player@#')
                     x += 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
@@ -816,14 +816,14 @@ class StarveSurvival(QMainWindow, QWidget):
             # спавнит рандомно ресурс
             x = random.randrange(11, int(mir + 10) - 1)
             y = random.randrange(11, int(mir + 10) - 1)
-            while level_map[x][y] != '0':
+            while 'q_wood@#' not in level_map[x][y]:
                 if int(mir) - 1 <= x:
                     y += 1
                     x = 11
                     if int(mir) - 1 <= y:
                         y = 11
                 x += 1
-            level_map[x][y] = resurs
+            level_map[x][y] = level_map[x][y].replace('nothing@#', resurs)
 
         def dobicha(hero):
             x, y = hero.pos
@@ -833,33 +833,33 @@ class StarveSurvival(QMainWindow, QWidget):
             vtoroe = 3
             for ne_i in range(vtoroe):
                 for ne_i2 in range(pervoe):
-                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'q' and lomanie == dobicha_nachati - sila:
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                    if 'q_wood@#' in level_map[y - ne_i + 1][x - 1 + ne_i2] and lomanie == dobicha_nachati - sila:
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('q_wood@#', 'nothing@#')
                         dobicha_vsego('drevesina', 15, 25)
-                        spawn_resursa('q')
-                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'w' and lomanie == dobicha_nachati + 2 - \
+                        spawn_resursa('q_wood@#')
+                    elif 'w_stone@#' in level_map[y - ne_i + 1][x - 1 + ne_i2] and lomanie == dobicha_nachati + 2 - \
                             sila and sila > 0:
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('w_stone@#', 'nothing@#')
                         dobicha_vsego('kamen_inv', 12, 20)
-                        spawn_resursa('w')
-                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'e' and lomanie == dobicha_nachati + 4 - \
+                        spawn_resursa('w_stone@#')
+                    elif 'e_gold@#' in level_map[y - ne_i + 1][x - 1 + ne_i2] and lomanie == dobicha_nachati + 4 - \
                             sila and sila > 1:
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('e_gold@#', 'nothing@#')
                         dobicha_vsego('gold_inv', 10, 18)
-                        spawn_resursa('e')
-                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 'r' and lomanie == dobicha_nachati + 6 - \
+                        spawn_resursa('e_gold@#')
+                    elif 'r_diamond@#' in level_map[y - ne_i + 1][x - 1 + ne_i2] and lomanie == dobicha_nachati + 6 - \
                             sila and sila > 2:
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('r_diamond@#', 'nothing@#')
                         dobicha_vsego('diamond_inv', 7, 15)
-                        spawn_resursa('r')
-                    elif level_map[y - ne_i + 1][x - 1 + ne_i2] == 't' and lomanie == dobicha_nachati + 8 - \
+                        spawn_resursa('r_diamond@#')
+                    elif 't_ametist@#' in level_map[y - ne_i + 1][x - 1 + ne_i2] == 't' and lomanie == dobicha_nachati + 8 - \
                             sila and sila > 3:
-                        level_map[y - ne_i + 1][x - 1 + ne_i2] = '0'
+                        level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('t_ametist@#', 'nothing@#')
                         dobicha_vsego('ametist_inv', 4, 9)
-                        spawn_resursa('t')
+                        spawn_resursa('t_ametist@#')
                     for agods in range(6):
                         if 'kust ' + str(agods + 1) in level_map[y - ne_i + 1][x - 1 + ne_i2]:
-                            level_map[y - ne_i + 1][x - 1 + ne_i2] = 'kust ' + str(agods) + ' ' + level_map[y - ne_i + 1][x - 1 + ne_i2].split()[-1]
+                            level_map[y - ne_i + 1][x - 1 + ne_i2] = 'kust ' + str(agods) + ' ' + level_map[y - ne_i + 1][x - 1 + ne_i2].split()[-2] + ' ' + level_map[y - ne_i + 1][x - 1 + ne_i2].split()[-1]
                             dobicha_agod()
                             ff = 0
                             for chet in range(len(kusti)):
@@ -1323,38 +1323,39 @@ class StarveSurvival(QMainWindow, QWidget):
                 block = 'block_diamond'
             elif 'block_ametist' in stavka_predmeta:
                 block = 'block_ametist'
+            block += '@#'
             if 526 < event.pos[0] < 828 and 225 < event.pos[1] < 451:
                 if 526 < event.pos[0] < 602 and 254 < event.pos[1] < 331:
-                    if level_map[y - 1][x - 1] == '0':
-                        level_map[y - 1][x - 1] = block
+                    if 'nothing@#' in level_map[y - 1][x - 1]:
+                        level_map[y - 1][x - 1] = level_map[y - 1][x - 1].replace('nothing@#', block)
                         return 0
                 elif 601 < event.pos[0] < 677 and 254 < event.pos[1] < 331:
-                    if level_map[y - 1][x] == '0':
-                        level_map[y - 1][x] = block
+                    if 'nothing@#' in level_map[y - 1][x]:
+                        level_map[y - 1][x] = level_map[y - 1][x].replace('nothing@#', block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 254 < event.pos[1] < 331:
-                    if level_map[y - 1][x + 1] == '0':
-                        level_map[y - 1][x + 1] = block
+                    if 'nothing@#' in level_map[y - 1][x + 1]:
+                        level_map[y - 1][x + 1] = level_map[y - 1][x + 1].replace('nothing@#', block)
                         return 0
                 elif 526 < event.pos[0] < 602 and 330 < event.pos[1] < 406:
-                    if level_map[y][x - 1] == '0':
-                        level_map[y][x - 1] = block
+                    if 'nothing@#' in level_map[y][x - 1]:
+                        level_map[y][x - 1] = level_map[y][x - 1].replace('nothing@#', block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 330 < event.pos[1] < 406:
-                    if level_map[y][x + 1] == '0':
-                        level_map[y][x + 1] = block
+                    if 'nothing@#' in level_map[y][x + 1]:
+                        level_map[y][x + 1] = level_map[y][x + 1].replace('nothing@#', block)
                         return 0
                 elif 526 < event.pos[0] < 602 and 405 < event.pos[1] < 481:
-                    if level_map[y + 1][x - 1] == '0':
-                        level_map[y + 1][x - 1] = block
+                    if 'nothing@#' in level_map[y + 1][x - 1]:
+                        level_map[y + 1][x - 1] = level_map[y + 1][x - 1].replace('nothing@#', block)
                         return 0
                 elif 601 < event.pos[0] < 677 and 405 < event.pos[1] < 481:
-                    if level_map[y + 1][x] == '0':
-                        level_map[y + 1][x] = block
+                    if 'nothing@#' in level_map[y + 1][x]:
+                        level_map[y + 1][x] = level_map[y + 1][x].replace('nothing@#', block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 405 < event.pos[1] < 481:
-                    if level_map[y + 1][x + 1] == '0':
-                        level_map[y + 1][x + 1] = block
+                    if 'nothing@#' in level_map[y + 1][x + 1]:
+                        level_map[y + 1][x + 1] = level_map[y + 1][x + 1].replace('nothing@#', block)
                         return 0
             return 1
 
@@ -1366,7 +1367,7 @@ class StarveSurvival(QMainWindow, QWidget):
             vtoroe = 3
             for ne_i in range(vtoroe):
                 for ne_i2 in range(pervoe):
-                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'verstak':
+                    if 'verstak' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
                         verstak_nalichie = True
             return verstak_nalichie
 
@@ -1380,7 +1381,7 @@ class StarveSurvival(QMainWindow, QWidget):
                 for ne_i2 in range(pervoe):
                     if 'chest' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
                         nomer_sunduka += 1
-                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('&')
+                        invent_chest = level_map[y - ne_i + 1][x - 1 + ne_i2].split('@#')[0].split('&')
                         for nomer in invent_chest[1:]:
                             chest_spawn(nomer, nomer_sunduka)
 
@@ -1399,18 +1400,18 @@ class StarveSurvival(QMainWindow, QWidget):
 
         def randomnoe_dvigenie(x_d, y_d, x, y):
             povorot = random.randint(1, 5)
-            if povorot == 1 and level_map[y + y_d - 6][x + x_d - 9] == '0':
-                level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                level_map[y + y_d - 5][x + x_d - 9] = '0'
-            if povorot == 2 and level_map[y + y_d - 5][x + x_d - 10] == '0':
-                level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                level_map[y + y_d - 5][x + x_d - 9] = '0'
-            if povorot == 3 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                level_map[y + y_d - 6][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                level_map[y + y_d - 5][x + x_d - 9] = '0'
-            if povorot == 4 and level_map[y + y_d - 5][x + x_d - 9] == '0':
-                level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                level_map[y + y_d - 5][x + x_d - 9] = '0'
+            if povorot == 1 and 'nothing@#' in level_map[y + y_d - 6][x + x_d - 9]:
+                level_map[y + y_d - 6][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 6][x + x_d - 9].split('@#')[1:])
+                level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
+            if povorot == 2 and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 10]:
+                level_map[y + y_d - 5][x + x_d - 10] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 10].split('@#')[1:])
+                level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
+            if povorot == 3 and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                level_map[y + y_d - 6][x + x_d - 8] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 6][x + x_d - 8].split('@#')[1:])
+                level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
+            if povorot == 4 and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                level_map[y + y_d - 4][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 4][x + x_d - 9].split('@#')[1:])
+                level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
 
         def dvigenie_mobov(player):
             # враждебные мобы способны отбегать от игрока, но они всегда возвращаются
@@ -1423,91 +1424,91 @@ class StarveSurvival(QMainWindow, QWidget):
                 for y_d in range(y_dvig):
                     if 'zaiz' in level_map[y + y_d - 5][x + x_d - 9]:
                         dvig = 0
-                        if x - 4 < x + x_d - 9 <= x and level_map[y + y_d - 5][x + x_d - 10] == '0':
-                            level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                        if x - 4 < x + x_d - 9 <= x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 10]:
+                            level_map[y + y_d - 5][x + x_d - 10] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 10].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
-                        elif x + 4 > x + x_d - 9 >= x and level_map[y + y_d - 5][x + x_d - 8] == '0' and \
+                        elif x + 4 > x + x_d - 9 >= x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 8] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 5][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 5][x + x_d - 8] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 8].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 8
                             dvig_2 = y + y_d - 5
-                        elif y + 4 > y + y_d - 5 >= y and level_map[y + y_d - 4][x + x_d - 9] == '0' and \
+                        elif y + 4 > y + y_d - 5 >= y and 'nothing@#' in level_map[y + y_d - 4][x + x_d - 9] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 4][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 4][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 4
-                        elif y - 4 < y + y_d - 5 <= y and level_map[y + y_d - 6][x + x_d - 9] == '0':
-                            level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                        elif y - 4 < y + y_d - 5 <= y and 'nothing@#' in level_map[y + y_d - 6][x + x_d - 9]:
+                            level_map[y + y_d - 6][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 6][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                         if dvig == 0:
                             randomnoe_dvigenie(x_d, y_d, x, y)
                     elif 'lisa' in level_map[y + y_d - 5][x + x_d - 9]:
                         dvig = 0
-                        if x - 4 < x + x_d - 9 < x and level_map[y + y_d - 5][x + x_d - 8] == '0' and \
+                        if x - 4 < x + x_d - 9 < x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 8] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 5][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 5][x + x_d - 8] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 8].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 8
                             dvig_2 = y + y_d - 5
-                        elif x + 4 > x + x_d - 9 > x and level_map[y + y_d - 5][x + x_d - 10] == '0' and \
+                        elif x + 4 > x + x_d - 9 > x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 10] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 5][x + x_d - 10] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 10].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 10
                             dvig_2 = y + y_d - 5
-                        elif y + 4 > y + y_d - 5 >= y and level_map[y + y_d - 6][x + x_d - 9] == '0' and \
+                        elif y + 4 > y + y_d - 5 >= y and 'nothing@#' in level_map[y + y_d - 6][x + x_d - 9] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 6][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 6][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 6
-                        elif y - 4 < y + y_d - 5 <= y and level_map[y + y_d - 4][x + x_d - 9] == '0' and \
+                        elif y - 4 < y + y_d - 5 <= y and 'nothing@#' in level_map[y + y_d - 4][x + x_d - 9] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 4][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 4][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 4
                         if level_map[y + y_d - 5][x + x_d - 9] == '#':
-                            dvig = 1
+                            dvig = 1 # возможно проверка на игрока, но я не помню
                         if dvig == 0:
                             randomnoe_dvigenie(x_d, y_d, x, y)
                     elif 'wolf' in level_map[y + y_d - 5][x + x_d - 9]:
                         dvig = 0
-                        if x - 4 < x + x_d - 9 < x and level_map[y + y_d - 5][x + x_d - 8] == '0' and \
+                        if x - 4 < x + x_d - 9 < x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 8] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 5][x + x_d - 8] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 5][x + x_d - 8] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 8].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 8
                             dvig_2 = y + y_d - 5
-                        elif x + 4 > x + x_d - 9 > x and level_map[y + y_d - 5][x + x_d - 10] == '0' and \
+                        elif x + 4 > x + x_d - 9 > x and 'nothing@#' in level_map[y + y_d - 5][x + x_d - 10] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 5][x + x_d - 10] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 5][x + x_d - 10] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 10].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 10
                             dvig_2 = y + y_d - 5
-                        elif y + 4 > y + y_d - 5 >= y and level_map[y + y_d - 6][x + x_d - 9] == '0' and \
+                        elif y + 4 > y + y_d - 5 >= y and 'nothing@#' in level_map[y + y_d - 6][x + x_d - 9] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 6][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 6][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 6][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 6
-                        elif y - 4 < y + y_d - 5 <= y and level_map[y + y_d - 4][x + x_d - 9] == '0' and \
+                        elif y - 4 < y + y_d - 5 <= y and 'nothing@#' in level_map[y + y_d - 4][x + x_d - 9] and \
                                 dvig_1 != x + x_d - 9 and dvig_2 != y + y_d - 5:
-                            level_map[y + y_d - 4][x + x_d - 9] = level_map[y + y_d - 5][x + x_d - 9]
-                            level_map[y + y_d - 5][x + x_d - 9] = '0'
+                            level_map[y + y_d - 4][x + x_d - 9] = ''.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[0]) + '@#' + '@#'.join(level_map[y + y_d - 4][x + x_d - 9].split('@#')[1:])
+                            level_map[y + y_d - 5][x + x_d - 9] = 'nothing@#' + '@#'.join(level_map[y + y_d - 5][x + x_d - 9].split('@#')[1:])
                             dvig = 1
                             dvig_1 = x + x_d - 9
                             dvig_2 = y + y_d - 4
@@ -1598,7 +1599,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
+                                level_map[y - ne_i - 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y - ne_i - 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y - ne_i - 1][x - 1 + ne_i2]:
@@ -1606,7 +1607,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
+                                level_map[y - ne_i - 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y - ne_i - 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y - ne_i - 1][x - 1 + ne_i2]:
@@ -1614,7 +1615,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y - ne_i - 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y - ne_i - 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y - ne_i - 1][x - 1 + ne_i2] = '0'
+                                level_map[y - ne_i - 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y - ne_i - 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(1)
                                 spawn_resursa('zaiz 25')
             if y_ydar < x_ydar > 360 and x_ydar + y_ydar > 720:
@@ -1625,7 +1626,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x + 1 + ne_i].split('@#')[1:])
                                 maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i2 - 1][x + 1 + ne_i]:
@@ -1633,7 +1634,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x + 1 + ne_i].split('@#')[1:])
                                 maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i2 - 1][x + 1 + ne_i]:
@@ -1641,7 +1642,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x + 1 + ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x + 1 + ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x + 1 + ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x + 1 + ne_i].split('@#')[1:])
                                 maso_v(1)
                                 spawn_resursa('zaiz 25')
             if x_ydar < y_ydar > 360 and x_ydar + y_ydar > 720:
@@ -1652,7 +1653,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
+                                level_map[y + ne_i + 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y + ne_i + 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i + 1][x - 1 + ne_i2]:
@@ -1660,7 +1661,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
+                                level_map[y + ne_i + 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y + ne_i + 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i + 1][x - 1 + ne_i2]:
@@ -1668,7 +1669,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i + 1][x - 1 + ne_i2] = ' '.join(mob)
                             if int(level_map[y + ne_i + 1][x - 1 + ne_i2].split()[1]) < 0:
-                                level_map[y + ne_i + 1][x - 1 + ne_i2] = '0'
+                                level_map[y + ne_i + 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y + ne_i + 1][x - 1 + ne_i2].split('@#')[1:])
                                 maso_v(1)
                                 spawn_resursa('zaiz 25')
             if y_ydar > x_ydar < 360 and x_ydar + y_ydar < 720:
@@ -1679,7 +1680,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x - 1 - ne_i].split('@#')[1:])
                                 maso_v(2)
                                 spawn_resursa('lisa 75')
                         if 'wolf' in level_map[y + ne_i2 - 1][x - 1 - ne_i]:
@@ -1687,7 +1688,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x - 1 - ne_i].split('@#')[1:])
                                 maso_v(3)
                                 spawn_resursa('wolf 150')
                         if 'zaiz' in level_map[y + ne_i2 - 1][x - 1 - ne_i]:
@@ -1695,7 +1696,7 @@ class StarveSurvival(QMainWindow, QWidget):
                             mob[1] = str(int(mob[1]) - yron)
                             level_map[y + ne_i2 - 1][x - 1 - ne_i] = ' '.join(mob)
                             if int(level_map[y + ne_i2 - 1][x - 1 - ne_i].split()[1]) < 0:
-                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = '0'
+                                level_map[y + ne_i2 - 1][x - 1 - ne_i] = 'nothing@#' + '@#'.join(level_map[y + ne_i2 - 1][x - 1 - ne_i].split('@#')[1:])
                                 maso_v(1)
                                 spawn_resursa('zaiz 25')
 
