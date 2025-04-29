@@ -166,6 +166,8 @@ class StarveSurvival(QMainWindow, QWidget):
                         Tile('block_ametist', x, y)
                     elif 'chest' in level[y][x]:
                         Tile('chest', x, y)
+                    elif 'door_derevo' in level[y][x]:
+                        Tile('door_derevo', x, y)
             # вернем игрока, а также размер поля в клетках
             return new_player, x, y
 
@@ -343,6 +345,11 @@ class StarveSurvival(QMainWindow, QWidget):
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
                     text_napisanie_chisla(i)
+                elif 'door_derevo' in i:
+                    pn = pygame.image.load('data/door_derevo_craft.png')
+                    ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
+                    screen.blit(pn, ris_invent)
+                    text_napisanie_chisla(i)
 
 
                 elif 'HP' in i:
@@ -508,6 +515,11 @@ class StarveSurvival(QMainWindow, QWidget):
                 ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
                 text_napisanie_chisla_chest(i, nomer_sunduka)
+            elif 'door_derevo' in i:
+                pn = pygame.image.load('data/door_derevo_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
             spisok_koord_chest.append([1080 + (int(i[0]) * 50) + 50, 50, nomer_sunduka, int(i[0]), i[1], int(i[2])])
 
         def craft_spawn():
@@ -552,11 +564,20 @@ class StarveSurvival(QMainWindow, QWidget):
                 if craft_chislo_x >= 5:
                     craft_chislo_x = 0
                     craft_chislo_y += 1
-            if q1 >= 150:
+            if q1 >= 100:
                 pn = pygame.image.load('data/stena_derevo_craft.png')
                 ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
                 screen.blit(pn, ris_invent)
                 spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'stena_derevo'])
+                craft_chislo_x += 1
+                if craft_chislo_x >= 5:
+                    craft_chislo_x = 0
+                    craft_chislo_y += 1
+            if q1 >= 150:
+                pn = pygame.image.load('data/door_derevo_craft.png')
+                ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
+                screen.blit(pn, ris_invent)
+                spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'door_derevo'])
                 craft_chislo_x += 1
                 if craft_chislo_x >= 5:
                     craft_chislo_x = 0
@@ -1007,6 +1028,19 @@ class StarveSurvival(QMainWindow, QWidget):
                     q1 += int(i[2])
                 elif 'kamen_inv' in i:
                     w1 += int(i[2])
+            q1 -= 100
+            v_inventar('drevesina', q1)
+
+        def craft_door_derevo():
+            dobavlenie_predmeta_v('door_derevo')
+            q1 = 0
+            w1 = 0
+            spisok_koord_craft.clear()
+            for i in inventar:
+                if 'drevesina' in i:
+                    q1 += int(i[2])
+                elif 'kamen_inv' in i:
+                    w1 += int(i[2])
             q1 -= 150
             v_inventar('drevesina', q1)
 
@@ -1273,6 +1307,8 @@ class StarveSurvival(QMainWindow, QWidget):
             # проверка какой блок ставится и его переделка для карты
             if 'stena_derevo' in stavka_predmeta:
                 block = 's_d'
+            elif 'door_derevo' in stavka_predmeta:
+                block = 'door_derevo'
             elif 'verstak' in stavka_predmeta:
                 block = 'verstak'
             elif 'chest' in stavka_predmeta:
@@ -1708,7 +1744,8 @@ class StarveSurvival(QMainWindow, QWidget):
             'block_gold': load_image('block_gold.png'),
             'block_diamond': load_image('block_diamond.png'),
             'block_ametist': load_image('block_ametist.png'),
-            'chest': load_image('chest.png')
+            'chest': load_image('chest.png'),
+            'door_derevo': load_image('door_derevo.png')
         }
         player_image = {
             'mar': load_image('mar.webp'),
@@ -1885,6 +1922,8 @@ class StarveSurvival(QMainWindow, QWidget):
                                     craft_mech_diamond()
                                 elif spi_koord[3] == 'mech_ametist':
                                     craft_mech_ametist()
+                                elif spi_koord[3] == 'door_derevo':
+                                    craft_door_derevo()
                     f = 0
                     for i in range(9):
                         if 365 + (i + 1) * 50 < event.pos[0] < 366 + (
@@ -1895,6 +1934,11 @@ class StarveSurvival(QMainWindow, QWidget):
                             # проверка, на какой предмет нажали и включение соответствующего режима
                             if 'stena_derevo' in inventar[i]:
                                 stavka_predmeta = inventar[i]
+                                stavka_bloka_vkl()
+                                rezim_vstavka_bloca = 1
+                            elif 'door_derevo' in inventar[i]:
+                                stavka_predmeta = inventar[i]
+                                print(stavka_predmeta)
                                 stavka_bloka_vkl()
                                 rezim_vstavka_bloca = 1
                             elif 'kirka_derevo' in inventar[i]:
