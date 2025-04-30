@@ -109,14 +109,19 @@ class StarveSurvival(QMainWindow, QWidget):
             new_player, x, y = None, None, None
             for y in range(len(level)):
                 for x in range(len(level[y])):
-                    if level[y][x] == '.':
+                    # для пола
+                    if 'grass@#' in level[y][x]:
                         Tile('empty', x, y)
-                    if 'nothing@#' in level[y][x]:
+                    if '@#floor_wood@#' in level[y][x]:
+                        Tile('floor_wood', x, y)
+                    if '@#door_derevo@#' in level[y][x]:
+                        Tile('floor_wood_open', x, y)
+
+                    if level[y][x] == '.':
                         Tile('empty', x, y)
                     elif level[y][x] == '#':
                         Tile('wall', x, y)
                     elif 'player@#' in level[y][x]:
-                        Tile('empty', x, y)
                         new_player = Player(x, y)
                     elif 'q_wood' in level[y][x]:
                         Tile('tree', x, y)
@@ -166,7 +171,7 @@ class StarveSurvival(QMainWindow, QWidget):
                         Tile('block_ametist', x, y)
                     elif 'chest' in level[y][x]:
                         Tile('chest', x, y)
-                    elif 'door_derevo' in level[y][x]:
+                    elif 'door_derevo' in level[y][x].split('@#')[0]:
                         Tile('door_derevo', x, y)
             # вернем игрока, а также размер поля в клетках
             return new_player, x, y
@@ -350,6 +355,11 @@ class StarveSurvival(QMainWindow, QWidget):
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
                     text_napisanie_chisla(i)
+                elif 'floor_wood' in i:
+                    pn = pygame.image.load('data/floor_wood.png')
+                    ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
+                    screen.blit(pn, ris_invent)
+                    text_napisanie_chisla(i)
 
 
                 elif 'HP' in i:
@@ -517,6 +527,11 @@ class StarveSurvival(QMainWindow, QWidget):
                 text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'door_derevo' in i:
                 pn = pygame.image.load('data/door_derevo_craft.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
+            elif 'floor_wood' in i:
+                pn = pygame.image.load('data/floor_wood.png')
                 ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
                 text_napisanie_chisla_chest(i, nomer_sunduka)
@@ -726,6 +741,15 @@ class StarveSurvival(QMainWindow, QWidget):
                 if craft_chislo_x >= 5:
                     craft_chislo_x = 0
                     craft_chislo_y += 1
+            if q1 >= 25:
+                pn = pygame.image.load('data/floor_wood_craft.png')
+                ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
+                screen.blit(pn, ris_invent)
+                spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'floor_wood'])
+                craft_chislo_x += 1
+                if craft_chislo_x >= 5:
+                    craft_chislo_x = 0
+                    craft_chislo_y += 1
 
         class Tile(pygame.sprite.Sprite):
             def __init__(self, tile_type, pos_x, pos_y):
@@ -750,7 +774,7 @@ class StarveSurvival(QMainWindow, QWidget):
             if dir == 'up':
                 if y > 0 and 'nothing@#' in level_map[y - 1][x]:
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
-                    level_map[y - 1][x] = level_map[y][x].replace('nothing@#', 'player@#')
+                    level_map[y - 1][x] = level_map[y - 1][x].replace('nothing@#', 'player@#')
                     y -= 1
                     camera.update(player)
                     # обновляем положение всех спрайтов
@@ -761,7 +785,7 @@ class StarveSurvival(QMainWindow, QWidget):
                 if y < len(level_map) and level_map[y + 1][x] == '.' or level_map[y + 1][x] == '@' \
                         or 'nothing@#' in level_map[y + 1][x]:
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
-                    level_map[y + 1][x] = level_map[y][x].replace('nothing@#', 'player@#')
+                    level_map[y + 1][x] = level_map[y + 1][x].replace('nothing@#', 'player@#')
                     y += 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
@@ -770,7 +794,7 @@ class StarveSurvival(QMainWindow, QWidget):
                 if x > 0 and level_map[y][x - 1] == '.' or level_map[y][x - 1] == '@' or 'nothing@#' in level_map[y][x - 1]:
                     # hero.move(x, y)
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
-                    level_map[y][x - 1] = level_map[y][x].replace('nothing@#', 'player@#')
+                    level_map[y][x - 1] = level_map[y][x - 1].replace('nothing@#', 'player@#')
                     x -= 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
@@ -780,7 +804,7 @@ class StarveSurvival(QMainWindow, QWidget):
                         or 'nothing@#' in level_map[y][x + 1]:
                     # hero.move(x, y)
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
-                    level_map[y][x + 1] = level_map[y][x].replace('nothing@#', 'player@#')
+                    level_map[y][x + 1] = level_map[y][x + 1].replace('nothing@#', 'player@#')
                     x += 1
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
@@ -1016,6 +1040,16 @@ class StarveSurvival(QMainWindow, QWidget):
                 if 'drevesina' in i:
                     q1 += int(i[2])
             q1 -= 50
+            v_inventar('drevesina', q1)
+
+        def floor_wood():
+            dobavlenie_predmeta_v('floor_wood')
+            q1 = 0
+            spisok_koord_craft.clear()
+            for i in inventar:
+                if 'drevesina' in i:
+                    q1 += int(i[2])
+            q1 -= 25
             v_inventar('drevesina', q1)
 
         def craft_stena():
@@ -1303,6 +1337,13 @@ class StarveSurvival(QMainWindow, QWidget):
 
         def stavka_bloca(hero):
             x, y = hero.pos
+            nothing = 'nothing@#'
+            nothing2 = 'nothing@#'
+            if 'floor' in stavka_predmeta[1]:
+                nothing = 'grass@#'
+                nothing2 = 'grass@#'
+            if 'door' in stavka_predmeta[1]:
+                nothing2 = 'grass@#'
             block = ''
             # проверка какой блок ставится и его переделка для карты
             if 'stena_derevo' in stavka_predmeta:
@@ -1323,39 +1364,49 @@ class StarveSurvival(QMainWindow, QWidget):
                 block = 'block_diamond'
             elif 'block_ametist' in stavka_predmeta:
                 block = 'block_ametist'
+            elif 'floor_wood' in stavka_predmeta:
+                block = 'floor_wood'
             block += '@#'
             if 526 < event.pos[0] < 828 and 225 < event.pos[1] < 451:
                 if 526 < event.pos[0] < 602 and 254 < event.pos[1] < 331:
-                    if 'nothing@#' in level_map[y - 1][x - 1]:
-                        level_map[y - 1][x - 1] = level_map[y - 1][x - 1].replace('nothing@#', block)
+                    if nothing in level_map[y - 1][x - 1]:
+                        level_map[y - 1][x - 1] = level_map[y - 1][x - 1].replace(nothing, block)
+                        level_map[y - 1][x - 1] = level_map[y - 1][x - 1].replace(nothing2, block)
                         return 0
                 elif 601 < event.pos[0] < 677 and 254 < event.pos[1] < 331:
-                    if 'nothing@#' in level_map[y - 1][x]:
-                        level_map[y - 1][x] = level_map[y - 1][x].replace('nothing@#', block)
+                    if nothing in level_map[y - 1][x]:
+                        level_map[y - 1][x] = level_map[y - 1][x].replace(nothing, block)
+                        level_map[y - 1][x] = level_map[y - 1][x].replace(nothing2, block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 254 < event.pos[1] < 331:
-                    if 'nothing@#' in level_map[y - 1][x + 1]:
-                        level_map[y - 1][x + 1] = level_map[y - 1][x + 1].replace('nothing@#', block)
+                    if nothing in level_map[y - 1][x + 1]:
+                        level_map[y - 1][x + 1] = level_map[y - 1][x + 1].replace(nothing, block)
+                        level_map[y - 1][x + 1] = level_map[y - 1][x + 1].replace(nothing2, block)
                         return 0
                 elif 526 < event.pos[0] < 602 and 330 < event.pos[1] < 406:
-                    if 'nothing@#' in level_map[y][x - 1]:
-                        level_map[y][x - 1] = level_map[y][x - 1].replace('nothing@#', block)
+                    if nothing in level_map[y][x - 1]:
+                        level_map[y][x - 1] = level_map[y][x - 1].replace(nothing, block)
+                        level_map[y][x - 1] = level_map[y][x - 1].replace(nothing2, block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 330 < event.pos[1] < 406:
-                    if 'nothing@#' in level_map[y][x + 1]:
-                        level_map[y][x + 1] = level_map[y][x + 1].replace('nothing@#', block)
+                    if nothing in level_map[y][x + 1]:
+                        level_map[y][x + 1] = level_map[y][x + 1].replace(nothing, block)
+                        level_map[y][x + 1] = level_map[y][x + 1].replace(nothing2, block)
                         return 0
                 elif 526 < event.pos[0] < 602 and 405 < event.pos[1] < 481:
-                    if 'nothing@#' in level_map[y + 1][x - 1]:
-                        level_map[y + 1][x - 1] = level_map[y + 1][x - 1].replace('nothing@#', block)
+                    if nothing in level_map[y + 1][x - 1]:
+                        level_map[y + 1][x - 1] = level_map[y + 1][x - 1].replace(nothing, block)
+                        level_map[y + 1][x - 1] = level_map[y + 1][x - 1].replace(nothing2, block)
                         return 0
                 elif 601 < event.pos[0] < 677 and 405 < event.pos[1] < 481:
-                    if 'nothing@#' in level_map[y + 1][x]:
-                        level_map[y + 1][x] = level_map[y + 1][x].replace('nothing@#', block)
+                    if nothing in level_map[y + 1][x]:
+                        level_map[y + 1][x] = level_map[y + 1][x].replace(nothing, block)
+                        level_map[y + 1][x] = level_map[y + 1][x].replace(nothing2, block)
                         return 0
                 elif 676 < event.pos[0] < 752 and 405 < event.pos[1] < 481:
-                    if 'nothing@#' in level_map[y + 1][x + 1]:
-                        level_map[y + 1][x + 1] = level_map[y + 1][x + 1].replace('nothing@#', block)
+                    if nothing in level_map[y + 1][x + 1]:
+                        level_map[y + 1][x + 1] = level_map[y + 1][x + 1].replace(nothing, block)
+                        level_map[y + 1][x + 1] = level_map[y + 1][x + 1].replace(nothing2, block)
                         return 0
             return 1
 
@@ -1385,7 +1436,6 @@ class StarveSurvival(QMainWindow, QWidget):
                         for nomer in invent_chest[1:]:
                             chest_spawn(nomer, nomer_sunduka)
 
-
         def koster_proverka(hero):
             x, y = hero.pos
             # проверка на наличие костра вокруг игрока
@@ -1394,9 +1444,21 @@ class StarveSurvival(QMainWindow, QWidget):
             vtoroe = 3
             for ne_i in range(vtoroe):
                 for ne_i2 in range(pervoe):
-                    if level_map[y - ne_i + 1][x - 1 + ne_i2] == 'koster':
+                    if 'koster' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
                         koster_nalichie = True
             return koster_nalichie
+
+        def open_door(hero):
+            x, y = hero.pos
+            pervoe = 3
+            vtoroe = 3
+            for ne_i in range(vtoroe):
+                for ne_i2 in range(pervoe):
+                    if 'door' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                        if 'nothing@#' in level_map[y - ne_i + 1][x - 1 + ne_i2]:
+                            level_map[y - ne_i + 1][x - 1 + ne_i2] = level_map[y - ne_i + 1][x - 1 + ne_i2].replace('nothing@#', level_map[y - ne_i + 1][x - 1 + ne_i2].split('@#')[2] + '@#', 1)
+                        else:
+                            level_map[y - ne_i + 1][x - 1 + ne_i2] = 'nothing@#' + '@#'.join(level_map[y - ne_i + 1][x - 1 + ne_i2].split('@#')[1:])
 
         def randomnoe_dvigenie(x_d, y_d, x, y):
             povorot = random.randint(1, 5)
@@ -1746,7 +1808,9 @@ class StarveSurvival(QMainWindow, QWidget):
             'block_diamond': load_image('block_diamond.png'),
             'block_ametist': load_image('block_ametist.png'),
             'chest': load_image('chest.png'),
-            'door_derevo': load_image('door_derevo.png')
+            'door_derevo': load_image('door_derevo.png'),
+            'floor_wood': load_image('floor_wood.png'),
+            'floor_wood_open': load_image('floor_wood_open.png')
         }
         player_image = {
             'mar': load_image('mar.webp'),
@@ -1845,6 +1909,8 @@ class StarveSurvival(QMainWindow, QWidget):
                         move(player, 'right')
                         bb = 1
                         lomanie = 0
+                    if event.key == pygame.K_f:
+                        open_door(player)
                     if event.key == pygame.K_F11:
                         if kakoi_ikran == 0:
                             screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
@@ -1925,6 +1991,8 @@ class StarveSurvival(QMainWindow, QWidget):
                                     craft_mech_ametist()
                                 elif spi_koord[3] == 'door_derevo':
                                     craft_door_derevo()
+                                elif spi_koord[3] == 'floor_wood':
+                                    floor_wood()
                     f = 0
                     for i in range(9):
                         if 365 + (i + 1) * 50 < event.pos[0] < 366 + (
@@ -1997,6 +2065,10 @@ class StarveSurvival(QMainWindow, QWidget):
                                 stavka_bloka_vkl()
                                 rezim_vstavka_bloca = 1
                             elif 'block_ametist' in inventar[i]:
+                                stavka_predmeta = inventar[i]
+                                stavka_bloka_vkl()
+                                rezim_vstavka_bloca = 1
+                            elif 'floor_wood' in inventar[i]:
                                 stavka_predmeta = inventar[i]
                                 stavka_bloka_vkl()
                                 rezim_vstavka_bloca = 1
