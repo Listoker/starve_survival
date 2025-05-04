@@ -780,7 +780,10 @@ class StarveSurvival(QMainWindow, QWidget):
         class Player(pygame.sprite.Sprite):
             def __init__(self, pos_x, pos_y):
                 super().__init__(player_group, all_sprites)
-                self.image = pygame.image.load("data/mar.webp").convert_alpha()
+                if int(int(lvl[3]) / 1000) % 2 == 1:
+                    self.image = pygame.image.load("data/mar_night.webp").convert_alpha()
+                else:
+                    self.image = pygame.image.load("data/mar.webp").convert_alpha()
                 self.rect = self.image.get_rect().move(
                     tile_width * pos_x - 12, tile_height * pos_y + 10)
                 self.pos_x = pos_x
@@ -1816,36 +1819,71 @@ class StarveSurvival(QMainWindow, QWidget):
 
         screen = pygame.display.set_mode((1280, 720))
         # получение обьектов из памяти
-        tile_images = {
-            'empty': load_image('grass.png'),
-            'tree': load_image('tree.png'),
-            'kamen': load_image('kamen.png'),
-            'gold': load_image('gold.png'),
-            'diamond': load_image('diamond.png'),
-            'ametists': load_image('ametists.png'),
-            'stena_derevo': load_image('stena_derevo.png'),
-            'lisa': load_image('lisa.png'),
-            'wolf': load_image('wolf.png'),
-            'kust': load_image('kust.png'),
-            'verstak': load_image('verstak.png'),
-            'koster': load_image('koster.png'),
-            'zaiz': load_image('zaiz.png'),
-            'kust_1': load_image('kust_1.png'),
-            'kust_2': load_image('kust_2.png'),
-            'kust_3': load_image('kust_3.png'),
-            'kust_4': load_image('kust_4.png'),
-            'kust_5': load_image('kust_5.png'),
-            'kust_6': load_image('kust_6.png'),
-            'voda': load_image('voda.png'),
-            'stena_kamen': load_image('stena_kamen.png'),
-            'block_gold': load_image('block_gold.png'),
-            'block_diamond': load_image('block_diamond.png'),
-            'block_ametist': load_image('block_ametist.png'),
-            'chest': load_image('chest.png'),
-            'door_derevo': load_image('door_derevo.png'),
-            'floor_wood': load_image('floor_wood.png'),
-            'floor_wood_open': load_image('floor_wood_open.png')
-        }
+        with open('nastroiki_mira/' + self.file_name.split('/')[-1], 'r') as nygno:
+            lvl = nygno.read().split('%_%')
+        if int(int(lvl[3]) / 1000) % 2 == 1:
+            # night
+            tile_images = {
+                'empty': load_image('grass_night.png'),
+                'tree': load_image('tree_night.png'),
+                'kamen': load_image('kamen_night.png'),
+                'gold': load_image('gold_night.png'),
+                'diamond': load_image('diamond_night.png'),
+                'ametists': load_image('ametists_night.png'),
+                'stena_derevo': load_image('stena_derevo.png'),
+                'lisa': load_image('lisa.png'),
+                'wolf': load_image('wolf.png'),
+                'kust': load_image('kust.png'),
+                'verstak': load_image('verstak.png'),
+                'koster': load_image('koster.png'),
+                'zaiz': load_image('zaiz.png'),
+                'kust_1': load_image('kust_1.png'),
+                'kust_2': load_image('kust_2.png'),
+                'kust_3': load_image('kust_3.png'),
+                'kust_4': load_image('kust_4.png'),
+                'kust_5': load_image('kust_5.png'),
+                'kust_6': load_image('kust_6.png'),
+                'voda': load_image('voda.png'),
+                'stena_kamen': load_image('stena_kamen.png'),
+                'block_gold': load_image('block_gold.png'),
+                'block_diamond': load_image('block_diamond.png'),
+                'block_ametist': load_image('block_ametist.png'),
+                'chest': load_image('chest.png'),
+                'door_derevo': load_image('door_derevo.png'),
+                'floor_wood': load_image('floor_wood.png'),
+                'floor_wood_open': load_image('floor_wood_open.png')
+            }
+        else:
+            tile_images = {
+                'empty': load_image('grass.png'),
+                'tree': load_image('tree.png'),
+                'kamen': load_image('kamen.png'),
+                'gold': load_image('gold.png'),
+                'diamond': load_image('diamond.png'),
+                'ametists': load_image('ametists.png'),
+                'stena_derevo': load_image('stena_derevo.png'),
+                'lisa': load_image('lisa.png'),
+                'wolf': load_image('wolf.png'),
+                'kust': load_image('kust.png'),
+                'verstak': load_image('verstak.png'),
+                'koster': load_image('koster.png'),
+                'zaiz': load_image('zaiz.png'),
+                'kust_1': load_image('kust_1.png'),
+                'kust_2': load_image('kust_2.png'),
+                'kust_3': load_image('kust_3.png'),
+                'kust_4': load_image('kust_4.png'),
+                'kust_5': load_image('kust_5.png'),
+                'kust_6': load_image('kust_6.png'),
+                'voda': load_image('voda.png'),
+                'stena_kamen': load_image('stena_kamen.png'),
+                'block_gold': load_image('block_gold.png'),
+                'block_diamond': load_image('block_diamond.png'),
+                'block_ametist': load_image('block_ametist.png'),
+                'chest': load_image('chest.png'),
+                'door_derevo': load_image('door_derevo.png'),
+                'floor_wood': load_image('floor_wood.png'),
+                'floor_wood_open': load_image('floor_wood_open.png')
+            }
         player_image = {
             'mar': load_image('mar.webp'),
             'pusto': load_image('pusto.png'),
@@ -1898,9 +1936,6 @@ class StarveSurvival(QMainWindow, QWidget):
         konez = 0
 
         kakoi_ikran = 0
-
-        with open('nastroiki_mira/' + self.file_name.split('/')[-1], 'r') as nygno:
-            lvl = nygno.read().split('%_%')
 
         while running:
             for event in pygame.event.get():
@@ -2146,6 +2181,70 @@ class StarveSurvival(QMainWindow, QWidget):
             screen.fill(pygame.Color('black'))
             obnovlenie += 1
             lvl[3] = str(int(lvl[3]) + 1)
+            if int(lvl[3]) / 1000 == int(int(lvl[3]) / 1000):
+                if int(lvl[3]) / 1000 % 2 == 1:
+                    # night
+                    tile_images = {
+                        'empty': load_image('grass_night.png'),
+                        'tree': load_image('tree_night.png'),
+                        'kamen': load_image('kamen_night.png'),
+                        'gold': load_image('gold_night.png'),
+                        'diamond': load_image('diamond_night.png'),
+                        'ametists': load_image('ametists_night.png'),
+                        'stena_derevo': load_image('stena_derevo.png'),
+                        'lisa': load_image('lisa.png'),
+                        'wolf': load_image('wolf.png'),
+                        'kust': load_image('kust.png'),
+                        'verstak': load_image('verstak.png'),
+                        'koster': load_image('koster.png'),
+                        'zaiz': load_image('zaiz.png'),
+                        'kust_1': load_image('kust_1.png'),
+                        'kust_2': load_image('kust_2.png'),
+                        'kust_3': load_image('kust_3.png'),
+                        'kust_4': load_image('kust_4.png'),
+                        'kust_5': load_image('kust_5.png'),
+                        'kust_6': load_image('kust_6.png'),
+                        'voda': load_image('voda.png'),
+                        'stena_kamen': load_image('stena_kamen.png'),
+                        'block_gold': load_image('block_gold.png'),
+                        'block_diamond': load_image('block_diamond.png'),
+                        'block_ametist': load_image('block_ametist.png'),
+                        'chest': load_image('chest.png'),
+                        'door_derevo': load_image('door_derevo.png'),
+                        'floor_wood': load_image('floor_wood.png'),
+                        'floor_wood_open': load_image('floor_wood_open.png')
+                    }
+                else:
+                    tile_images = {
+                        'empty': load_image('grass.png'),
+                        'tree': load_image('tree.png'),
+                        'kamen': load_image('kamen.png'),
+                        'gold': load_image('gold.png'),
+                        'diamond': load_image('diamond.png'),
+                        'ametists': load_image('ametists.png'),
+                        'stena_derevo': load_image('stena_derevo.png'),
+                        'lisa': load_image('lisa.png'),
+                        'wolf': load_image('wolf.png'),
+                        'kust': load_image('kust.png'),
+                        'verstak': load_image('verstak.png'),
+                        'koster': load_image('koster.png'),
+                        'zaiz': load_image('zaiz.png'),
+                        'kust_1': load_image('kust_1.png'),
+                        'kust_2': load_image('kust_2.png'),
+                        'kust_3': load_image('kust_3.png'),
+                        'kust_4': load_image('kust_4.png'),
+                        'kust_5': load_image('kust_5.png'),
+                        'kust_6': load_image('kust_6.png'),
+                        'voda': load_image('voda.png'),
+                        'stena_kamen': load_image('stena_kamen.png'),
+                        'block_gold': load_image('block_gold.png'),
+                        'block_diamond': load_image('block_diamond.png'),
+                        'block_ametist': load_image('block_ametist.png'),
+                        'chest': load_image('chest.png'),
+                        'door_derevo': load_image('door_derevo.png'),
+                        'floor_wood': load_image('floor_wood.png'),
+                        'floor_wood_open': load_image('floor_wood_open.png')
+                    }
             if obnovlenie == 270:
                 # обновляет статы
                 obnovlenie = 0
