@@ -360,6 +360,11 @@ class StarveSurvival(QMainWindow, QWidget):
                     ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
                     screen.blit(pn, ris_invent)
                     text_napisanie_chisla(i)
+                elif 'sledgehammer_kamen' in i:
+                    pn = pygame.image.load('data/sledgehammer_kamen.png')
+                    ris_invent = pn.get_rect().move(365 + (int(i[0]) * 50), 670)
+                    screen.blit(pn, ris_invent)
+                    text_napisanie_chisla(i)
 
 
                 elif 'HP' in i:
@@ -532,6 +537,11 @@ class StarveSurvival(QMainWindow, QWidget):
                 text_napisanie_chisla_chest(i, nomer_sunduka)
             elif 'floor_wood' in i:
                 pn = pygame.image.load('data/floor_wood.png')
+                ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
+                screen.blit(pn, ris_invent)
+                text_napisanie_chisla_chest(i, nomer_sunduka)
+            elif 'sledgehammer_kamen' in i:
+                pn = pygame.image.load('data/sledgehammer_kamen.png')
                 ris_invent = pn.get_rect().move(1080 + (int(i[0]) * 50), 50 * nomer_sunduka)
                 screen.blit(pn, ris_invent)
                 text_napisanie_chisla_chest(i, nomer_sunduka)
@@ -746,6 +756,15 @@ class StarveSurvival(QMainWindow, QWidget):
                 ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
                 screen.blit(pn, ris_invent)
                 spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'floor_wood'])
+                craft_chislo_x += 1
+                if craft_chislo_x >= 5:
+                    craft_chislo_x = 0
+                    craft_chislo_y += 1
+            if q1 >= 80 and w1 > 60 and verstak_nalichie:
+                pn = pygame.image.load('data/sledgehammer_kamen.png')
+                ris_invent = pn.get_rect().move(craft_chislo_x * 50, craft_chislo_y * 50)
+                screen.blit(pn, ris_invent)
+                spisok_koord_craft.append([craft_chislo_x, craft_chislo_y, 50, 'sledgehammer_kamen'])
                 craft_chislo_x += 1
                 if craft_chislo_x >= 5:
                     craft_chislo_x = 0
@@ -1331,6 +1350,21 @@ class StarveSurvival(QMainWindow, QWidget):
                         maso_siroe -= 355
                     else:
                         inventar[int(inv[0]) - 1] = [inv[0], 'pusto', '0']
+
+        def craft_sledgehammer_kamen():
+            dobavlenie_predmeta_v('sledgehammer_kamen')
+            q1 = 0
+            w1 = 0
+            spisok_koord_craft.clear()
+            for i in inventar:
+                if 'drevesina' in i:
+                    q1 += int(i[2])
+                elif 'kamen_inv' in i:
+                    w1 += int(i[2])
+            q1 -= 70
+            w1 -= 30
+            v_inventar('drevesina', q1)
+            v_inventar('kamen_inv', w1)
 
         def stavka_bloka_vkl():
             print('режим вкл')
@@ -1993,6 +2027,8 @@ class StarveSurvival(QMainWindow, QWidget):
                                     craft_door_derevo()
                                 elif spi_koord[3] == 'floor_wood':
                                     floor_wood()
+                                elif spi_koord[3] == 'sledgehammer_kamen':
+                                    craft_sledgehammer_kamen()
                     f = 0
                     for i in range(9):
                         if 365 + (i + 1) * 50 < event.pos[0] < 366 + (
@@ -2109,6 +2145,7 @@ class StarveSurvival(QMainWindow, QWidget):
 
             screen.fill(pygame.Color('black'))
             obnovlenie += 1
+            lvl[3] = str(int(lvl[3]) + 1)
             if obnovlenie == 270:
                 # обновляет статы
                 obnovlenie = 0
@@ -2216,6 +2253,8 @@ class StarveSurvival(QMainWindow, QWidget):
                 inven = inven[:-1] + '%'
             with open('inventar/' + lvl[0] + '.txt', 'w') as f:
                 f.write(''.join(inven)[:-1])
+            with open('nastroiki_mira/' + lvl[0] + '.txt', 'w') as f:
+                f.write('%_%'.join(lvl))
         pygame.quit()
 
 

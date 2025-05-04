@@ -218,6 +218,7 @@ class Generachia(QWidget):
         with open('nastroiki_mira/' + self.lvl[0] + '.txt', 'w') as f:
             self.lvl[1] = str(self.lvl[1])
             self.lvl[2] = str(self.lvl[2])
+            self.lvl.append('0')
             f.write('%_%'.join(self.lvl))
         self.color_data.emit()
 
