@@ -176,6 +176,84 @@ class StarveSurvival(QMainWindow, QWidget):
             # вернем игрока, а также размер поля в клетках
             return new_player, x, y
 
+        def generate_level_opt(level, hero):
+
+            x_dvig = 19
+            y_dvig = 11
+            x, y = hero.pos
+            dvig_1 = []
+            dvig_2 = []
+            new_player = None
+            for x_d in range(x_dvig):
+                for y_d in range(y_dvig):
+                    # if 'zaiz' in level_map[y + y_d - 5][x + x_d - 9]:
+                    # для пола
+                    if 'grass@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                        Tile('empty', x + x_d - 9, y + y_d - 5)
+                    if '@#floor_wood@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                        Tile('floor_wood', x + x_d - 9, y + y_d - 5)
+                    if '@#door_derevo@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                        Tile('floor_wood_open', x + x_d - 9, y + y_d - 5)
+
+                    if level[y + y_d - 5][x + x_d - 9] == '.':
+                        Tile('empty', x + x_d - 9, y + y_d - 5)
+                    elif level[y + y_d - 5][x + x_d - 9] == '#':
+                        Tile('wall', x + x_d - 9, y + y_d - 5)
+                    elif 'player@#' in level_map[y + y_d - 5][x + x_d - 9]:
+                        new_player = Player(x + x_d - 9, y + y_d - 5)
+                    elif 'q_wood' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('tree', x + x_d - 9, y + y_d - 5)
+                    elif 'w_stone' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kamen', x + x_d - 9, y + y_d - 5)
+                    elif 'e_gold' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('gold', x + x_d - 9, y + y_d - 5)
+                    elif 'r_diamond' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('diamond', x + x_d - 9, y + y_d - 5)
+                    elif 't_ametist' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('ametists', x + x_d - 9, y + y_d - 5)
+                    elif 's_d' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('stena_derevo', x + x_d - 9, y + y_d - 5)
+                    elif 'wolf' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('wolf', x + x_d - 9, y + y_d - 5)
+                    elif 'lisa' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('lisa', x + x_d - 9, y + y_d - 5)
+                    elif 'zaiz' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('zaiz', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 1' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_1', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 2' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_2', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 3' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_3', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 4' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_4', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 5' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_5', x + x_d - 9, y + y_d - 5)
+                    elif 'kust 6' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust_6', x + x_d - 9, y + y_d - 5)
+                    elif 'kust' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('kust', x + x_d - 9, y + y_d - 5)
+                    elif 'verstak' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('verstak', x + x_d - 9, y + y_d - 5)
+                    elif 'koster' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('koster', x + x_d - 9, y + y_d - 5)
+                    elif 'water' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('voda', x + x_d - 9, y + y_d - 5)
+                    elif 'stena_kamen' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('stena_kamen', x + x_d - 9, y + y_d - 5)
+                    elif 'block_gold' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('block_gold', x + x_d - 9, y + y_d - 5)
+                    elif 'block_diamond' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('block_diamond', x + x_d - 9, y + y_d - 5)
+                    elif 'block_ametist' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('block_ametist', x + x_d - 9, y + y_d - 5)
+                    elif 'chest' in level[y + y_d - 5][x + x_d - 9]:
+                        Tile('chest', x + x_d - 9, y + y_d - 5)
+                    elif 'door_derevo' in level[y + y_d - 5][x + x_d - 9].split('@#')[0]:
+                        Tile('door_derevo', x + x_d - 9, y + y_d - 5)
+            # вернем игрока, а также размер поля в клетках
+            return new_player, x, y
+
         def generate_level_kust(level):
             for y in range(len(level)):
                 for x in range(len(level[y])):
@@ -1937,6 +2015,8 @@ class StarveSurvival(QMainWindow, QWidget):
 
         kakoi_ikran = 0
 
+        font = pygame.font.Font(None, 30)  # For displaying FPS
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -2276,7 +2356,8 @@ class StarveSurvival(QMainWindow, QWidget):
             all_sprites = pygame.sprite.Group()
             tiles_group = pygame.sprite.Group()
             player_group = pygame.sprite.Group()
-            player, level_x, level_y = generate_level(level_map)
+            # player, level_x, level_y = generate_level(level_map)
+            player, level_x, level_y = generate_level_opt(level_map, player)
             if bb == 1:
                 camera.update(player)
                 # обновляем положение всех спрайтов
@@ -2331,8 +2412,16 @@ class StarveSurvival(QMainWindow, QWidget):
                 sila = 0
                 yron = 0
                 rezim_vstavka_bloca = 0
+
+            # screen.fill((0, 0, 0))  # Clear the screen
+
+            # ...drawing game objects...
+
+            fps = clock.get_fps()  # Get the actual FPS
+            fps_text = font.render(f"FPS: {fps:.2f}", True, (255, 255, 255))
+            screen.blit(fps_text, (10, 10))
             pygame.display.flip()
-            clock.tick(50)
+            clock.tick(60)
 
             # сохранение мира
             maaaaap = ''
