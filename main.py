@@ -858,7 +858,7 @@ class StarveSurvival(QMainWindow, QWidget):
         class Player(pygame.sprite.Sprite):
             def __init__(self, pos_x, pos_y):
                 super().__init__(player_group, all_sprites)
-                if int(int(lvl[3]) / 1000) % 2 == 1:
+                if int(int(lvl[3]) / 5000) % 2 == 1:
                     self.image = pygame.image.load("data/mar_night.webp").convert_alpha()
                 else:
                     self.image = pygame.image.load("data/mar.webp").convert_alpha()
@@ -2285,8 +2285,8 @@ class StarveSurvival(QMainWindow, QWidget):
             screen.fill(pygame.Color('black'))
             obnovlenie += 1
             lvl[3] = str(int(lvl[3]) + 1)
-            if int(lvl[3]) / 1000 == int(int(lvl[3]) / 1000):
-                if int(lvl[3]) / 1000 % 2 == 1:
+            if int(lvl[3]) / 5000 == int(int(lvl[3]) / 5000):
+                if int(lvl[3]) / 5000 % 2 == 1:
                     # night
                     tile_images = {
                         'empty': load_image('grass_night.png'),
