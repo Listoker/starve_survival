@@ -219,6 +219,8 @@ class Generachia(QWidget):
             self.lvl[1] = str(self.lvl[1])
             self.lvl[2] = str(self.lvl[2])
             self.lvl.append('0')
+            self.lvl.append('0')
+            self.lvl.append('0')
             f.write('%_%'.join(self.lvl))
         self.color_data.emit()
 

@@ -863,49 +863,70 @@ class StarveSurvival(QMainWindow, QWidget):
                 else:
                     self.image = pygame.image.load("data/mar.webp").convert_alpha()
                 self.rect = self.image.get_rect().move(
-                    tile_width * pos_x - 12, tile_height * pos_y + 10)
+                    tile_width * pos_x - 12 - int(lvl[4]), tile_height * pos_y + 10 + int(lvl[5]))
                 self.pos_x = pos_x
                 self.pos_y = pos_y
                 self.pos = (self.pos_x, self.pos_y)
 
-        def move(hero, dir):
+        def move(hero, dir, speed):
             # перемещение героя
             x, y = hero.pos
+            x_0, y_0 = int(lvl[4]), int(lvl[5])
             if dir == 'up':
-                if y > 0 and 'nothing@#' in level_map[y - 1][x]:
+                if y_0 > -36:
+                    y_0 -= 3 * speed
+                    lvl[5] = str(y_0)
+                elif y > 0 and 'nothing@#' in level_map[y - 1][x]:
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
                     level_map[y - 1][x] = level_map[y - 1][x].replace('nothing@#', 'player@#')
                     y -= 1
+                    y_0 = 36
+                    lvl[5] = str(y_0)
                     camera.update(player)
                     # обновляем положение всех спрайтов
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply2(sprite)
             elif dir == 'down':
-                if y < len(level_map) and level_map[y + 1][x] == '.' or level_map[y + 1][x] == '@' \
+                if y_0 < 36:
+                    y_0 += 3 * speed
+                    lvl[5] = str(y_0)
+                elif y < len(level_map) and level_map[y + 1][x] == '.' or level_map[y + 1][x] == '@' \
                         or 'nothing@#' in level_map[y + 1][x]:
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
                     level_map[y + 1][x] = level_map[y + 1][x].replace('nothing@#', 'player@#')
                     y += 1
+                    y_0 = -36
+                    lvl[5] = str(y_0)
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply3(sprite)
             elif dir == 'left':
-                if x > 0 and level_map[y][x - 1] == '.' or level_map[y][x - 1] == '@' or 'nothing@#' in level_map[y][x - 1]:
+                if x_0 < 36:
+                    x_0 += 3 * speed
+                    lvl[4] = str(x_0)
+                elif x > 0 and level_map[y][x - 1] == '.' or level_map[y][x - 1] == '@' or 'nothing@#' in level_map[y][x - 1]:
                     # hero.move(x, y)
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
                     level_map[y][x - 1] = level_map[y][x - 1].replace('nothing@#', 'player@#')
                     x -= 1
+                    x_0 = -36
+                    lvl[4] = str(x_0)
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply4(sprite)
             elif dir == 'right':
-                if x < len(level_map) and level_map[y][x + 1] == '.' or level_map[y][x + 1] == '@'\
+                if x_0 > -36:
+                    x_0 -= 3 * speed
+                    lvl[4] = str(x_0)
+                elif x < len(level_map) and level_map[y][x + 1] == '.' or level_map[y][x + 1] == '@'\
                         or 'nothing@#' in level_map[y][x + 1]:
                     # hero.move(x, y)
                     level_map[y][x] = level_map[y][x].replace('player@#', 'nothing@#')
                     level_map[y][x + 1] = level_map[y][x + 1].replace('nothing@#', 'player@#')
                     x += 1
+                    x_0 = 36
+                    lvl[4] = str(x_0)
                     for sprite in all_sprites:
                         if 'Player' not in str(sprite):
                             camera.apply5(sprite)
@@ -2018,6 +2039,43 @@ class StarveSurvival(QMainWindow, QWidget):
         font = pygame.font.Font(None, 30)  # For displaying FPS
 
         while running:
+            keys = pygame.key.get_pressed()
+            speed = 1
+            if keys[pygame.K_LSHIFT]:
+                speed *= 2
+            # кнопки на которые ходит персонаж
+            if keys[pygame.K_UP]:
+                move(player, 'up', speed)
+                lomanie = 0
+                bb = 1
+            if keys[pygame.K_DOWN]:
+                move(player, 'down', speed)
+                bb = 1
+                lomanie = 0
+            if keys[pygame.K_LEFT]:
+                move(player, 'left', speed)
+                bb = 1
+                lomanie = 0
+            if keys[pygame.K_RIGHT]:
+                move(player, 'right', speed)
+                bb = 1
+                lomanie = 0
+            if keys[pygame.K_w]:
+                move(player, 'up', speed)
+                lomanie = 0
+                bb = 1
+            if keys[pygame.K_s]:
+                move(player, 'down', speed)
+                bb = 1
+                lomanie = 0
+            if keys[pygame.K_a]:
+                move(player, 'left', speed)
+                bb = 1
+                lomanie = 0
+            if keys[pygame.K_d]:
+                move(player, 'right', speed)
+                bb = 1
+                lomanie = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -2025,39 +2083,6 @@ class StarveSurvival(QMainWindow, QWidget):
                     if event.key == pygame.K_ESCAPE:
                         sys.exit()
                 if event.type == pygame.KEYDOWN and konez == 0:
-                    # кнопки на которые ходит персонаж
-                    if event.key == pygame.K_UP:
-                        move(player, 'up')
-                        lomanie = 0
-                        bb = 1
-                    if event.key == pygame.K_DOWN:
-                        move(player, 'down')
-                        bb = 1
-                        lomanie = 0
-                    if event.key == pygame.K_LEFT:
-                        move(player, 'left')
-                        bb = 1
-                        lomanie = 0
-                    if event.key == pygame.K_RIGHT:
-                        move(player, 'right')
-                        bb = 1
-                        lomanie = 0
-                    if event.key == pygame.K_w:
-                        move(player, 'up')
-                        lomanie = 0
-                        bb = 1
-                    if event.key == pygame.K_s:
-                        move(player, 'down')
-                        bb = 1
-                        lomanie = 0
-                    if event.key == pygame.K_a:
-                        move(player, 'left')
-                        bb = 1
-                        lomanie = 0
-                    if event.key == pygame.K_d:
-                        move(player, 'right')
-                        bb = 1
-                        lomanie = 0
                     if event.key == pygame.K_f:
                         open_door(player)
                     if event.key == pygame.K_F11:
@@ -2158,7 +2183,6 @@ class StarveSurvival(QMainWindow, QWidget):
                                 rezim_vstavka_bloca = 1
                             elif 'door_derevo' in inventar[i]:
                                 stavka_predmeta = inventar[i]
-                                print(stavka_predmeta)
                                 stavka_bloka_vkl()
                                 rezim_vstavka_bloca = 1
                             elif 'kirka_derevo' in inventar[i]:
